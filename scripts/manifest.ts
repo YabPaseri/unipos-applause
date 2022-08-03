@@ -7,12 +7,12 @@ import pkg from '../package.json';
  * 補完が効くので、ts で生成している。
  */
 (() => {
-	const manifest: chrome.runtime.Manifest = {
+	const manifest: chrome.runtime.ManifestV3 = {
 		manifest_version: 3,
 		name: 'Unipos Applause',
 		version: pkg.version,
 
-		default_locale: 'ja',
+		// default_locale: 'ja',
 		description: pkg.description,
 		icons: {
 			'16': './img/icon16.png',
@@ -22,9 +22,6 @@ import pkg from '../package.json';
 		},
 
 		author: pkg.author,
-		background: {
-			service_worker: 'background.js',
-		},
 		content_scripts: [
 			{
 				matches: ['https://unipos.me/*'],
@@ -40,4 +37,6 @@ import pkg from '../package.json';
 	const json_path = path.resolve(process.argv[1] || '', '..', '..', 'dist', 'manifest.json');
 	fs.mkdirSync(path.dirname(json_path), { recursive: true });
 	fs.writeFileSync(json_path, JSON.stringify(manifest, void 0, '\t'), { encoding: 'utf-8' });
+
+	console.log(`${__filename}: COMPLETED!!`);
 })();

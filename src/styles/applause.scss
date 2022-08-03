@@ -1,0 +1,35 @@
+// 拍手+
+.ua-applause {
+	margin-left: 0 !important;
+	// +
+	> span {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: #f19935;
+		font-weight: bold;
+		font-size: 1.2em;
+		user-select: none;
+	}
+
+	&.is-disable {
+		pointer-events: none;
+		> span {
+			opacity: 0.5;
+		}
+	}
+}
+
+// x1, x3, x5
+.ua-applause-cf {
+	// 拍手+の右に移動
+	.c-bulkClapTooltipWrap {
+		left: 84px !important;
+	}
+	// HoverObserver でクラス付与された要素の
+	// 子要素になった場合にも出現
+	&.ua-hover .c-bulkClapTooltipWrap {
+		visibility: visible;
+		opacity: 1;
+	}
+}

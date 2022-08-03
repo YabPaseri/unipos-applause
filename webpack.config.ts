@@ -20,8 +20,7 @@ const config = (_env: any, argv: any): Configuration => {
 			extensions: ['.js', '.ts'],
 		},
 		entry: {
-			background: './src/background/index.ts',
-			'content-script': './src/content-script/index.ts',
+			'content-script': './src/content.ts',
 		},
 		output: {
 			path: path.resolve(__dirname, 'dist'),

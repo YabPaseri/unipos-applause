@@ -15,4 +15,6 @@ import path from 'path';
 		const to = path.resolve(dist_path, 'img');
 		fs.copySync(from, to, { recursive: true });
 	}
+
+	console.log(`${__filename}: COMPLETED!!`);
 })();
