@@ -9,7 +9,8 @@ export class Options {
 		public DEBUG: boolean,
 		public TRY_INTERVAL: number,
 		public TRY_LIMIT: number,
-		public NO_CHECK: boolean
+		public NO_CHECK: boolean,
+		public NO_SPLIT: boolean
 	) {}
 
 	private static defaultize<T extends string | number | boolean | undefined>(v: unknown, def: T, check?: (v: T) => boolean): T {
@@ -28,7 +29,8 @@ export class Options {
 		const TRY_INTERVAL = this.defaultize<number>(s['TRY_INTERVAL'], 250, this.positiveInt);
 		const TRY_LIMIT = this.defaultize<number>(s['TRY_LIMIT'], 40, this.positiveInt);
 		const NO_CHECK = this.defaultize<boolean>(s['NO_CHECK'], false);
-		Options._p = new Options(DEBUG, TRY_INTERVAL, TRY_LIMIT, NO_CHECK);
+		const NO_SPLIT = this.defaultize<boolean>(s['NO_SPLIT'], false);
+		Options._p = new Options(DEBUG, TRY_INTERVAL, TRY_LIMIT, NO_CHECK, NO_SPLIT);
 	}
 
 	async save(): Promise<void> {

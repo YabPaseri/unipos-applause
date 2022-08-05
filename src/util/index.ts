@@ -31,4 +31,24 @@ export default class Util {
 			return NaN;
 		}
 	}
+
+	/**
+	 * total(整数)をdivisor(整数)でいい感じに分割する。
+	 */
+	public static divide(total: number, divisor: number[]): Record<string, number> {
+		if (!Number.isSafeInteger(total) || !(total > 0)) return {};
+		let n = total;
+		const re: Record<number, number> = {};
+		for (const i of divisor.sort((a, b) => b - a)) {
+			if (!Number.isSafeInteger(i) || !(i > 0)) continue;
+			let c = 0;
+			while (n - i >= 0) {
+				n -= i;
+				c++;
+			}
+			re[i] = c;
+		}
+		if (n !== 0) re[1] = n;
+		return re;
+	}
 }

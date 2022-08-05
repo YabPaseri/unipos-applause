@@ -98,7 +98,15 @@ export class ClickObserver extends ApplauseObserver {
 		})();
 		if (!input) return;
 
-		UniposAPI.praise(this.booked, input);
+		const divide = !Options.p.NO_SPLIT ? Util.divide(input, [5, 3, 1]) : { [input]: 1 };
+		for (const d of Object.entries(divide)) {
+			if (d[1] < 1) continue;
+			const n = parseInt(d[0]);
+			for (let i = 0; i < d[1]; i++) {
+				UniposAPI.praise(this.booked, n);
+			}
+		}
+
 		this.booked = void 0;
 	}
 }
