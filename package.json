@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "unipos-applause",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Unipos(https://unipos.me/) の拍手ツール",
   "homepage": "https://github.com/YabPaseri/unipos-applause#readme",
   "bugs": {
@@ -15,9 +15,9 @@
   "author": "YabPaseri",
   "scripts": {
     "ts-node": "ts-node -r tsconfig-paths/register",
-	"prebuild-dev": "rimraf dist/*",
-	"build-dev": "run-p build-dev:webpack build:manifest build:copy",
-	"build-dev:webpack": "webpack --config webpack.config.ts --mode development --progress",
+    "prebuild-dev": "rimraf dist/*",
+    "build-dev": "run-p build-dev:webpack build:manifest build:copy",
+    "build-dev:webpack": "webpack --config webpack.config.ts --mode development --progress",
     "prebuild": "rimraf dist/*",
     "build": "run-p build:*",
     "build:webpack": "webpack --config webpack.config.ts --mode production --progress",
