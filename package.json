@@ -16,14 +16,15 @@
   "scripts": {
     "ts-node": "ts-node -r tsconfig-paths/register",
     "prebuild-dev": "rimraf dist/*",
-    "build-dev": "run-p build-dev:webpack build:manifest build:copy",
-    "build-dev:webpack": "webpack --config webpack.config.ts --mode development --progress",
+    "build-dev": "run-p build-dev:webpack make:*",
+    "build-dev:webpack": "npm run webpack -- --mode development",
     "prebuild": "rimraf dist/*",
-    "build": "run-p build:*",
-    "build:webpack": "webpack --config webpack.config.ts --mode production --progress",
-    "build:manifest": "npm run ts-node ./scripts/manifest.ts",
-    "build:copy": "npm run ts-node ./scripts/copy.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "run-p build:webpack make:*",
+    "build:webpack": "npm run webpack -- --mode production",
+    "webpack": "webpack --config webpack.config.ts",
+    "make:manifest": "ts-node ./scripts/manifest.ts",
+    "make:copy": "ts-node ./scripts/copy.ts",
+    "archive": "ts-node ./scripts/archive.ts"
   },
   "engines": {
     "node": "16.13.1"
@@ -36,11 +37,13 @@
     "@babel/plugin-transform-runtime": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
     "@babel/preset-typescript": "^7.18.6",
+    "@types/archiver": "^5.3.1",
     "@types/chrome": "^0.0.193",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.47",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
+    "archiver": "^5.3.1",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "eslint": "^8.21.0",
