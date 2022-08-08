@@ -1,6 +1,10 @@
 import { DEBUG } from '../util';
 import { InsertableObserver } from './insertable-observer';
 
+/**
+ * PageObserverで「タイムライン」のページを検知したときに起動するオブザーバ。\
+ * 「タイムライン」内における投稿の読み込みを検知し、拍手+を追加する。
+ */
 export class TimelineObserver extends InsertableObserver {
 	public static runnable(): boolean {
 		return document.querySelector('div.pageNav') !== null;
@@ -16,9 +20,12 @@ export class TimelineObserver extends InsertableObserver {
 		return { childList: true };
 	}
 
-	protected started(_target: HTMLElement): void {
-		this.insert(...Array.from(_target.childNodes));
+	protected override start(): boolean {
+		const started = super.start();
+		if (started) this.insert(...Array.from(this.target?.childNodes || []));
+		return started;
 	}
+
 	protected observed(mutations: MutationRecord[]): void {
 		DEBUG.log('detected timeline update');
 		for (const mutation of mutations) {

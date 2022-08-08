@@ -1,12 +1,21 @@
+import { Options } from '../options';
 import { DEBUG } from '../util';
-import { ApplauseObserver } from './applause-observer';
 import { InsertableObserver } from './insertable-observer';
+import { UAObserver } from './ua-observer';
 
-export class ProfileObserver extends ApplauseObserver {
+/**
+ * PageObserverで「プロフィール」のページを検知したときに起動するオブザーバ。\
+ * 「プロフィール」に表示しているユーザの切り替わりを検知し、\
+ * 「プロフィール」内のタイムラインを監視するオブザーバを制御する。
+ */
+export class ProfileObserver extends UAObserver {
 	public static runnable(): boolean {
+		// v1.1.1
+		// サイレントアップデートによって、クラスが変更された。
+		// しばらく様子を見て、問題なさそうであれば新クラス側に完全移行
 		return (
 			document.querySelector('div.profile___profile--profileWrap') !== null || // 新
-			document.querySelector('div.profileWrap') !== null // 旧
+			document.querySelector('div.profileWrap') != null // 旧
 		);
 	}
 
@@ -25,11 +34,12 @@ export class ProfileObserver extends ApplauseObserver {
 			document.querySelector('.profileWrap'); // 旧
 		if (!target) return false;
 		this.mutation_obs.observe(target, { childList: true });
-		this.timeline_obs.observe();
+		const interval = setInterval(() => {
+			if (this.timeline_obs.observe()) clearInterval(interval);
+		}, Options.TRY_INTERVAL);
 		DEBUG.log('profile observer started');
 		return true;
 	}
-
 	protected stop(): void {
 		this.mutation_obs.disconnect();
 		this.timeline_obs.disconnect();
@@ -37,19 +47,23 @@ export class ProfileObserver extends ApplauseObserver {
 	}
 
 	private observed(mutations: MutationRecord[]) {
-		loop: for (const mutation of mutations) {
-			for (const added of Array.from(mutation.addedNodes)) {
-				if (!(added instanceof HTMLElement)) continue;
-				if (added.querySelector('.timeline-body')) {
-					this.timeline_obs.disconnect();
-					this.timeline_obs.observe();
-					break loop;
-				}
+		for (const added of mutations.flatMap((m) => Array.from(m.addedNodes))) {
+			if (!(added instanceof HTMLElement)) continue;
+			if (added.querySelector('.timeline-body') !== null) {
+				DEBUG.log('detected profile change');
+				this.timeline_obs.disconnect();
+				this.timeline_obs.observe();
+				break;
 			}
 		}
 	}
 }
 
+/**
+ * 「プロフィール」ページのタイムライン（もらった・おくった・拍手した）の\
+ * 投稿の読み込みを検知して、拍手を追加するオブザーバ。\
+ * 「プロフィール」に表示しているユーザが変化する度に、再起動が必要。
+ */
 class ProfileTLObserver extends InsertableObserver {
 	protected started_msg = 'profile timeline observer started';
 	protected stopped_msg = 'profile timeline observer stopped';
@@ -61,9 +75,12 @@ class ProfileTLObserver extends InsertableObserver {
 		return { childList: true };
 	}
 
-	protected started(_target: HTMLElement): void {
-		this.insert(...Array.from(_target.childNodes));
+	protected override start(): boolean {
+		const started = super.start();
+		if (started) this.insert(...Array.from(this.target?.childNodes || []));
+		return started;
 	}
+
 	protected observed(mutations: MutationRecord[]): void {
 		DEBUG.log('detected profile timeline update');
 		for (const mutation of mutations) {

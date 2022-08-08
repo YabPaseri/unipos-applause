@@ -1,1 +1,1 @@
-export * from './clap-plus';
+export * from './applause';

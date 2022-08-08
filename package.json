@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "unipos-applause",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Unipos(https://unipos.me/) の拍手ツール",
   "homepage": "https://github.com/YabPaseri/unipos-applause#readme",
   "bugs": {
@@ -24,6 +24,7 @@
     "webpack": "webpack --config webpack.config.ts",
     "make:manifest": "ts-node ./scripts/manifest.ts",
     "make:copy": "ts-node ./scripts/copy.ts",
+    "ver": "npm --no-git-tag-version version",
     "archive": "ts-node ./scripts/archive.ts"
   },
   "engines": {

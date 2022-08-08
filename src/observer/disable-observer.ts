@@ -1,9 +1,14 @@
-import { ClapPlus } from '../components';
-import { ClassName } from '../styles';
+import { Applause } from '../components';
+import { CLS, selector } from '../styles';
 import Util, { DEBUG } from '../util';
-import { ApplauseObserver } from './applause-observer';
+import { UAObserver } from './ua-observer';
 
-export class DisableObserver extends ApplauseObserver {
+/**
+ * 拍手のアクティブの変化を検知するオブザーバ。\
+ * 拍手を上限まで送ってボタンを押せなくなったときなど、\
+ * 拍手のアクティブが変化したときに、その横にある拍手+のアクティブも揃える。
+ */
+export class DisableObserver extends UAObserver {
 	private mutation_obs: MutationObserver;
 
 	constructor() {
@@ -15,31 +20,35 @@ export class DisableObserver extends ApplauseObserver {
 		const target = document.getElementById('content');
 		if (!target) return false;
 		this.mutation_obs.observe(target, { subtree: true, attributes: true, attributeFilter: ['class'], attributeOldValue: true });
-		DEBUG.log('disable observer started.');
+		DEBUG.log('disable observer started');
 		return true;
 	}
-
 	protected stop(): void {
 		this.mutation_obs.disconnect();
-		DEBUG.log('disable observer stopped.');
+		DEBUG.log('disable observer stopped');
 	}
 
 	private observed(mutations: MutationRecord[]) {
 		for (const mutation of mutations) {
-			if (mutation.target.nodeType !== Node.ELEMENT_NODE) continue;
-			const ele = <HTMLElement>mutation.target;
+			if (!(mutation.target instanceof HTMLElement)) continue;
+			// 拍手だけ対象(+は対象外)
+			const classes = mutation.target.classList;
+			if (!classes.contains(CLS.CLAP) || classes.contains(CLS.APPLAUSE)) continue;
 
-			// 拍手のみ対象(+は非対象)
-			if (!ele.classList.contains(ClassName.CLAP) || ele.classList.contains(ClassName.APPLAUSE)) continue;
-
-			const prev = mutation.oldValue?.split(' ').includes(ClassName.DISABLE) || false;
-			const next = ele.classList.contains(ClassName.DISABLE);
+			const prev = mutation.oldValue?.split(' ').includes(CLS.DISABLE) || false;
+			const next = classes.contains(CLS.DISABLE);
 			if (prev === next) continue;
 
-			const clap_plus = Util.ancestorClass(ele, ['clap', 'cf', ClassName.APPLAUSE_CF]) // .clap.cf.ua-applause-cf まで戻る。
-				?.querySelector<HTMLElement>(`.${ClassName.CLAP}.${ClassName.APPLAUSE}`);
-			if (clap_plus) {
-				ClapPlus.disabled(clap_plus, next);
+			const applause =
+				// <? class="clap cf ua-applause-parent"/> まで戻った後に
+				// その子孫にある 拍手+ を探す
+				Util.ancestor(mutation.target, (ele) => {
+					const c = ele.classList.contains.bind(ele.classList);
+					return c('clap') && c('cf') && c(CLS.APPLAUSE_PARENT);
+				})?.querySelector<HTMLElement>(selector(CLS.CLAP) + selector(CLS.APPLAUSE));
+
+			if (applause) {
+				Applause.disable(applause, next);
 				DEBUG.log('detected disable change');
 			}
 		}

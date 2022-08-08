@@ -1,35 +1,51 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import path from 'path';
 import sass from 'sass';
-import { Configuration } from 'webpack';
+import { CallableOption } from 'webpack-cli';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const config = (_env: any, argv: any): Configuration => {
-	const IS_DEV = argv.mode === 'development';
+/**
+ * webpackの設定。\
+ * コマンドライン引数で処理の分岐を行えるように、関数にしている。
+ */
+const option: CallableOption = (_env, argv) => {
+	const IS_PROD = argv.mode === 'production';
 	return {
-		mode: IS_DEV ? 'development' : 'production',
-		devtool: IS_DEV ? 'source-map' : void 0,
-		node: {
-			__dirname: false,
-			__filename: false,
-		},
+		// ビルドのモード
+		// webpackの幾つかの設定が最適化される
+		// https://webpack.js.org/configuration/mode/
+		mode: IS_PROD ? 'production' : 'development',
+
+		// ソースマップの種類
+		// evalを使うと、unsafe-evalをContent-Security-Policyに書かなければならないので
+		// 使わないタイプを指定している
+		// 本番ビルドでは作らない。
+		// https://webpack.js.org/configuration/devtool/
+		devtool: IS_PROD ? false : 'inline-source-map',
+
 		resolve: {
-			alias: {
-				'~': path.resolve(__dirname, 'src'),
-			},
+			// 使用する拡張子
 			extensions: ['.js', '.ts'],
 		},
+
+		// バンドル処理の起点
+		// https://webpack.js.org/configuration/entry-context/#entry
 		entry: {
 			'content-script': './src/content.ts',
 		},
+
+		// バンドル結果などの出力先
+		// https://webpack.js.org/configuration/output/
 		output: {
 			path: path.resolve(__dirname, 'dist'),
+			// [name] は entry で指定した {key: value} の key に置き換わる
 			filename: '[name].js',
-			// clean: true,
 		},
+
+		// モジュールに関する設定
 		module: {
 			rules: [
 				{
+					// ts ファイルを babel-loader で処理
 					test: /\.ts$/,
 					exclude: /node_modules/,
 					use: {
@@ -52,6 +68,10 @@ const config = (_env: any, argv: any): Configuration => {
 					},
 				},
 				{
+					// scss ファイルを 配列の後ろにある loader から処理
+					// sass-loader: sass を css にコンパイルする
+					// css-loader: import された css を js に埋め込む
+					// MiniCssExtractPlugin: 埋め込まれた css を独立したファイルにする
 					test: /\.scss$/,
 					use: [
 						{ loader: MiniCssExtractPlugin.loader },
@@ -61,15 +81,20 @@ const config = (_env: any, argv: any): Configuration => {
 				},
 			],
 		},
+
+		// プラグインの追加と設定
 		plugins: [
 			new MiniCssExtractPlugin({
 				filename: '[name].css',
 			}),
 		],
+
+		// 高度な最適化（詳細オプション的）
 		optimization: {
+			// deadコードを削除する
 			usedExports: true,
 		},
 	};
 };
 
-export default config;
+export default option;

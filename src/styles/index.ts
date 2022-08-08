@@ -1,3 +1,3 @@
-import './applause.scss';
+import './style.scss';
 
-export * from './class-name';
+export * from './cls';

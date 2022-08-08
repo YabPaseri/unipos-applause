@@ -1,6 +1,11 @@
 import { DEBUG } from '../util';
 import { InsertableObserver } from './insertable-observer';
 
+/**
+ * 投稿がモーダルで開かれたことを検知するオブザーバ。\
+ * 引用投稿の引用元 や 通知欄から開く投稿 などが該当する。\
+ * 開かれた投稿に拍手+を追加する。
+ */
 export class CardModalObserver extends InsertableObserver {
 	protected started_msg = 'card modal observer started';
 	protected stopped_msg = 'card modal observer stopped';
@@ -11,16 +16,14 @@ export class CardModalObserver extends InsertableObserver {
 	protected get options(): MutationObserverInit {
 		return { childList: true };
 	}
+
 	protected observed(mutations: MutationRecord[]): void {
-		loop: for (const mutation of mutations) {
-			if (mutation.addedNodes.length === 0) continue;
-			for (const added of Array.from(mutation.addedNodes)) {
-				if (!(added instanceof HTMLElement)) continue;
-				if (added.classList.contains('cardModalBackGround')) {
-					this.insert(added);
-					DEBUG.log('detected card modal open');
-					break loop;
-				}
+		for (const added of mutations.flatMap((m) => Array.from(m.addedNodes))) {
+			if (!(added instanceof HTMLElement)) continue;
+			if (added.classList.contains('cardModalBackGround')) {
+				DEBUG.log('detected card modal open');
+				this.insert(added);
+				break;
 			}
 		}
 	}
