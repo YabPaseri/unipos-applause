@@ -4,7 +4,10 @@ import { InsertableObserver } from './insertable-observer';
 
 export class ProfileObserver extends ApplauseObserver {
 	public static runnable(): boolean {
-		return document.querySelector('div.profileWrap') !== null;
+		return (
+			document.querySelector('div.profile___profile--profileWrap') !== null || // 新
+			document.querySelector('div.profileWrap') !== null // 旧
+		);
 	}
 
 	private mutation_obs: MutationObserver;
@@ -17,7 +20,9 @@ export class ProfileObserver extends ApplauseObserver {
 	}
 
 	protected start(): boolean {
-		const target = document.querySelector('.profileWrap');
+		const target =
+			document.querySelector('.profile___profile--profileWrap') || // 新
+			document.querySelector('.profileWrap'); // 旧
 		if (!target) return false;
 		this.mutation_obs.observe(target, { childList: true });
 		this.timeline_obs.observe();
