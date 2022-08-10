@@ -16,9 +16,7 @@ export class Options {
 		}
 	}
 	public static removeListener(l: OptionsListener) {
-		const len = this.listeners.length;
 		this.listeners = this.listeners.filter((_l) => _l !== l);
-		if (len !== this.listeners.length) console.log('any listener removed');
 	}
 	// 現在の設定を複製してから、fyで設定に手を加え、変更前の設定を通知に渡す。
 	private static notify(fy: (e: OptionsEntity) => void) {

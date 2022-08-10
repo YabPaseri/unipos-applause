@@ -53,7 +53,7 @@ export class ProfilePanelObserver extends UAObserver {
 			const sidemenu_ol = ProfileMenu.create(
 				Options.SIDEMENU_BACKDROP ? e_check : d_check,
 				'サイドメニューを展開時に\nバックドロップを表示',
-				'サイドメニューが開閉できる状態かつ展開されている時ににバックドロップを表示します。バックドロップをクリックすることでも、メニューが閉じるようになります。'
+				'サイドメニューが開閉できる状態かつ展開されている時にバックドロップを表示します。バックドロップをクリックすることでも、メニューが閉じるようになります。'
 			);
 			sidemenu_ol.addEventListener('click', (e) => {
 				const next = !Options.SIDEMENU_BACKDROP;
