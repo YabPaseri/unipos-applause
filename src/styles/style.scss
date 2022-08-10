@@ -30,3 +30,27 @@
 		opacity: 1;
 	}
 }
+
+// サイドメニューに追加される背景
+.ua-sidemenu-backdrop {
+	transition: opacity 0.5s, visibility 0.5s;
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: visible;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: 149; // ヘッダーのz-index(150) - 1
+	background-color: rgba(0, 0, 0, 0.5);
+	&.ua-show {
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+// ヘッダーのプロフィールアイコンを押したときに表示されるメニュー
+.c-headerProfile_menu {
+	user-select: none;
+}

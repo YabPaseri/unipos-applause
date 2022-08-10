@@ -5,6 +5,27 @@ import Util from './util';
  */
 export class Options {
 	private static e: OptionsEntity;
+	private static listeners: OptionsListener[] = [];
+
+	/**
+	 * 設定が更新された時に通知を受け取る関数を登録する。
+	 */
+	public static addListener(l: OptionsListener) {
+		if (!this.listeners.includes(l)) {
+			this.listeners.push(l);
+		}
+	}
+	public static removeListener(l: OptionsListener) {
+		const len = this.listeners.length;
+		this.listeners = this.listeners.filter((_l) => _l !== l);
+		if (len !== this.listeners.length) console.log('any listener removed');
+	}
+	// 現在の設定を複製してから、fyで設定に手を加え、変更前の設定を通知に渡す。
+	private static notify(fy: (e: OptionsEntity) => void) {
+		const bk = new OptionsEntity(JSON.parse(JSON.stringify(this.e)));
+		fy(this.e);
+		for (const l of this.listeners) l(bk);
+	}
 
 	/**
 	 * Optionsの準備。
@@ -37,7 +58,9 @@ export class Options {
 		if (typeof v !== 'boolean') {
 			throw new TypeError('Options.DEBUG accepts only boolean.');
 		}
-		this.e.DEBUG = v;
+		if (this.e.DEBUG !== v) {
+			this.notify((e) => (e.DEBUG = v));
+		}
 	}
 
 	/**
@@ -53,7 +76,10 @@ export class Options {
 		if (v < 1) {
 			throw new RangeError('Options.TRY_INTERVAL accepts only positive integers.');
 		}
-		this.e.TRY_INTERVAL = v;
+		if (this.e.TRY_INTERVAL !== v) {
+			// this.e.TRY_INTERVAL = v;
+			this.notify((e) => (e.TRY_INTERVAL = v));
+		}
 	}
 
 	/**
@@ -69,7 +95,10 @@ export class Options {
 		if (v < 1) {
 			throw new RangeError('Options.TRY_LIMIT accepts only positive integers.');
 		}
-		this.e.TRY_LIMIT = v;
+		if (this.e.TRY_LIMIT !== v) {
+			// this.e.TRY_LIMIT = v;
+			this.notify((e) => (e.TRY_LIMIT = v));
+		}
 	}
 
 	/**
@@ -82,7 +111,10 @@ export class Options {
 		if (typeof v !== 'boolean') {
 			throw new TypeError('Options.NO_CHECK accepts only boolean.');
 		}
-		this.e.NO_CHECK = v;
+		if (this.e.NO_CHECK !== v) {
+			// this.e.NO_CHECK = v;
+			this.notify((e) => (e.NO_CHECK = v));
+		}
 	}
 
 	/**
@@ -95,9 +127,35 @@ export class Options {
 		if (typeof v !== 'boolean') {
 			throw new TypeError('Options.NO_SPLIT accepts only boolean.');
 		}
-		this.e.NO_SPLIT = v;
+		if (this.e.NO_SPLIT !== v) {
+			// this.e.NO_SPLIT = v;
+			this.notify((e) => (e.NO_SPLIT = v));
+		}
+	}
+
+	/**
+	 * サイドメニューにバックドロップを追加する
+	 */
+	public static get SIDEMENU_BACKDROP(): boolean {
+		return this.e.SIDEMENU_BACKDROP;
+	}
+	public static set SIDEMENU_BACKDROP(v: boolean) {
+		if (typeof v !== 'boolean') {
+			throw new TypeError('Options.SIDE_OVERLAY accepts only boolean.');
+		}
+		if (this.e.SIDEMENU_BACKDROP !== v) {
+			// this.e.SIDEMENU_OVERLAY = v;
+			this.notify((e) => (e.SIDEMENU_BACKDROP = v));
+		}
 	}
 }
+
+/**
+ * 設定が変わったときに呼ばれるリスナーの型\
+ * 変更前の設定がわたってくるので、Options.xxx の現在の値と比較するなどして使う。
+ */
+export type OptionsListener = (old: ROptions) => void;
+export type ROptions = Readonly<OptionsEntity>;
 
 /**
  * Optionsの値を格納しておく箱
@@ -108,6 +166,7 @@ class OptionsEntity {
 	public TRY_LIMIT: number;
 	public NO_CHECK: boolean;
 	public NO_SPLIT: boolean;
+	public SIDEMENU_BACKDROP: boolean;
 
 	constructor(v: {
 		DEBUG?: boolean; //
@@ -115,11 +174,13 @@ class OptionsEntity {
 		TRY_LIMIT?: number;
 		NO_CHECK?: boolean;
 		NO_SPLIT?: boolean;
+		SIDEMENU_BACKDROP?: boolean;
 	}) {
 		this.DEBUG = typeof v.DEBUG === 'boolean' && v.DEBUG;
 		this.TRY_INTERVAL = Util.isPositiveInt(v.TRY_INTERVAL) ? <number>v.TRY_INTERVAL : 250;
 		this.TRY_LIMIT = Util.isPositiveInt(v.TRY_LIMIT) ? <number>v.TRY_LIMIT : 40;
 		this.NO_CHECK = typeof v.NO_CHECK === 'boolean' && v.NO_CHECK;
 		this.NO_SPLIT = typeof v.NO_SPLIT === 'boolean' && v.NO_SPLIT;
+		this.SIDEMENU_BACKDROP = typeof v.SIDEMENU_BACKDROP === 'boolean' && v.SIDEMENU_BACKDROP;
 	}
 }

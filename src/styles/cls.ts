@@ -26,6 +26,21 @@ export class CLS {
 	 * 拍手+の親要素のホバー(Extension)
 	 */
 	public static readonly HOVER = 'ua-hover';
+
+	/**
+	 * サイドメニューのz-index的な後ろに追加する背景(Extension)
+	 */
+	public static readonly SIDEMENU_BACKDROP = 'ua-sidemenu-backdrop';
+
+	/**
+	 * サイドメニューに追加する背景を表示(Extension)
+	 */
+	public static readonly SIDEMENU_BACKDROP_SHOW = 'ua-show';
+
+	/**
+	 * ヘッダーのプロフィールアイコンを押すと表示されるメニューのアイテム
+	 */
+	public static readonly HEADER_PROFILE_MENU = 'c-headerProfile_menu';
 }
 
 /**

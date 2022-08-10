@@ -16,6 +16,8 @@ export class UniposAPI {
 		return token;
 	}
 
+	// ENHANCE: refreshToken を使用したトークンの更新
+
 	/**
 	 * UniposのAPI呼び出しにおける共通処理。
 	 */

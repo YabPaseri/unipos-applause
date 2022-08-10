@@ -1,0 +1,12 @@
+<!--
+	This file was obtained from
+	https://ionic.io/ionicons
+	(https://unpkg.com/ionicons@5.5.2/dist/svg/checkbox-outline.svg)
+	> Premium designed icons for use in web, iOS, Android, and desktop apps. Support for SVG and web font. Completely open source, MIT licensed and built by Ionic.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	<g transform="scale(0.85) translate(38.4,38.4)">
+		<path fill="none" stroke="rgba(31, 37, 38, 0.65)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M352 176L217.6 336 160 272"/>
+		<rect x="64" y="64" width="384" height="384" rx="48" ry="48" fill="none" stroke="rgba(31, 37, 38, 0.65)" stroke-linejoin="round" stroke-width="32"/>
+	</g>
+</svg>

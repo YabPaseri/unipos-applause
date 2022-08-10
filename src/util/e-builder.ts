@@ -20,6 +20,12 @@ export class EBuilder<K extends keyof HTMLElementTagNameMap> {
 		return true;
 	}
 
+	public title(title: string): this {
+		if (this.skip) return this;
+		this.e.title = title;
+		return this;
+	}
+
 	public classes(...classes: string[]): this {
 		if (this.skip) return this;
 		this.e.classList.add(...classes);
@@ -29,6 +35,12 @@ export class EBuilder<K extends keyof HTMLElementTagNameMap> {
 	public text(text: string): this {
 		if (this.skip) return this;
 		this.e.textContent = text;
+		return this;
+	}
+
+	public itext(innerText: string): this {
+		if (this.skip) return this;
+		this.e.innerText = innerText;
 		return this;
 	}
 
@@ -47,6 +59,17 @@ export class EBuilder<K extends keyof HTMLElementTagNameMap> {
 	public child<L extends keyof HTMLElementTagNameMap>(b: EBuilder<L>): this {
 		if (this.skip) return this;
 		this.append(b.end());
+		return this;
+	}
+
+	public event<L extends keyof HTMLElementEventMap>(
+		type: L,
+		listener: (ev: HTMLElementEventMap[L]) => unknown,
+		options?: boolean | AddEventListenerOptions
+	): this {
+		if (this.skip) return this;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		this.e.addEventListener(type, <any>listener, options);
 		return this;
 	}
 

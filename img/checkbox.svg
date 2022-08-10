@@ -1,0 +1,13 @@
+<!--
+	This file was obtained from
+	https://ionic.io/ionicons
+	(https://unpkg.com/ionicons@5.5.2/dist/svg/square-outline.svg)
+	> Premium designed icons for use in web, iOS, Android, and desktop apps. Support for SVG and web font. Completely open source, MIT licensed and built by Ionic.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	<g transform="scale(0.85) translate(38.4,38.4)">
+		<path d="M416 448H96a32.09 32.09 0 01-32-32V96a32.09 32.09 0 0132-32h320a32.09 32.09 0 0132 32v320a32.09 32.09 0 01-32 32z"
+			fill="none" stroke="rgba(31, 37, 38, 0.65)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
+		/>
+	</g>
+</svg>

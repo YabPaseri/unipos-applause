@@ -3,6 +3,8 @@ import { CardModalObserver } from './observer/card-modal-observer';
 import { DisableObserver } from './observer/disable-observer';
 import { HoverObserver } from './observer/hover-observer';
 import { PageObserver } from './observer/page-observer';
+import { ProfilePanelObserver } from './observer/profile-panel-observer';
+import { SideMenuObserver } from './observer/sidemenu-observer';
 import { UAObserver } from './observer/ua-observer';
 import { Options } from './options';
 import { DEBUG } from './util';
@@ -17,6 +19,8 @@ import { DEBUG } from './util';
 		.add(new HoverObserver())
 		.add(new ApplauseClickObserver())
 		.add(new CardModalObserver())
+		.add(new ProfilePanelObserver())
+		.add(new SideMenuObserver())
 		.add(new PageObserver());
 
 	let success = false;

@@ -51,7 +51,11 @@ export class ApplauseClickObserver extends UAObserver {
 		this.booked = true;
 		this.prepare(card_id)
 			.then((count) => this.send(card_id, count))
-			.then(() => (this.booked = false));
+			.then(() => (this.booked = false))
+			.catch((e) => {
+				this.booked = false;
+				Promise.reject(e);
+			});
 	}
 
 	private async prepare(card_id: string): Promise<number | undefined> {

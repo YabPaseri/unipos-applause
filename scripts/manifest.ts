@@ -31,7 +31,12 @@ import pkg from '../package.json';
 		],
 
 		permissions: ['storage'],
-		// web_accessible_resources: [{ matches: ['https://unipos.me/*'], resources: [] }],
+		web_accessible_resources: [
+			{
+				resources: ['/img/checkbox.svg', '/img/checkbox-active.svg'],
+				matches: ['https://unipos.me/*'],
+			},
+		],
 	};
 
 	const json_path = path.resolve(process.argv[1] || '', '..', '..', 'dist', 'manifest.json');
