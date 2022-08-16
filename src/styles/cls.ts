@@ -8,6 +8,20 @@ export class CLS {
 	public static readonly CLAP = 'c-clapIcon';
 
 	/**
+	 * 投稿
+	 */
+	public static readonly CARD = 'card___card--card';
+
+	/**
+	 * 拍手や拍手数の親要素(1)
+	 */
+	public static readonly CLAP_PARENT_1 = 'card___clap--clap';
+	/**
+	 * 拍手や拍手数の親要素(2)
+	 */
+	public static readonly CLAP_PARENT_2 = 'cf';
+
+	/**
 	 * 拍手+(Extension)
 	 */
 	public static readonly APPLAUSE = 'ua-applause';
@@ -28,6 +42,11 @@ export class CLS {
 	public static readonly HOVER = 'ua-hover';
 
 	/**
+	 * サイドメニューが非表示状態であることを表すクラス(Unipos)
+	 */
+	public static readonly SIDEMENU_HIDDEN = 'c-is-containerHidden';
+
+	/**
 	 * サイドメニューのz-index的な後ろに追加する背景(Extension)
 	 */
 	public static readonly SIDEMENU_BACKDROP = 'ua-sidemenu-backdrop';
@@ -38,13 +57,29 @@ export class CLS {
 	public static readonly SIDEMENU_BACKDROP_SHOW = 'ua-show';
 
 	/**
+	 * ヘッダーのプロフィールアイコンを押すと表示されるメニュー
+	 */
+	public static readonly HEADER_PROFILE_PANEL = 'c-headerProfile_panel';
+
+	/**
 	 * ヘッダーのプロフィールアイコンを押すと表示されるメニューのアイテム
 	 */
 	public static readonly HEADER_PROFILE_MENU = 'c-headerProfile_menu';
+
+	/**
+	 * モーダルで表示される投稿の背景
+	 */
+	public static readonly CARD_MODAL_BG = 'cardModalBackGround';
+
+	/**
+	 * モーダルで表示される投稿
+	 */
+	public static readonly CARD_MODAL = 'cardModal';
 }
 
 /**
  * クラス名の先頭に「.」をつける。
+ * @deprecated
  */
 export const selector = (value: string): string => {
 	return `.${value}`;

@@ -1,4 +1,5 @@
 import { Options } from '../options';
+import { SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { InsertableObserver } from './insertable-observer';
 import { UAObserver } from './ua-observer';
@@ -13,10 +14,7 @@ export class ProfileObserver extends UAObserver {
 		// v1.1.1
 		// サイレントアップデートによって、クラスが変更された。
 		// しばらく様子を見て、問題なさそうであれば新クラス側に完全移行
-		return (
-			document.querySelector('div.profile___profile--profileWrap') !== null || // 新
-			document.querySelector('div.profileWrap') != null // 旧
-		);
+		return document.querySelector(SLCT.PF_PROOF) !== null;
 	}
 
 	private mutation_obs: MutationObserver;
@@ -29,9 +27,7 @@ export class ProfileObserver extends UAObserver {
 	}
 
 	protected start(): boolean {
-		const target =
-			document.querySelector('.profile___profile--profileWrap') || // 新
-			document.querySelector('.profileWrap'); // 旧
+		const target = document.querySelector(SLCT.PF_PROOF);
 		if (!target) return false;
 		this.mutation_obs.observe(target, { childList: true });
 		const interval = setInterval(() => {
@@ -49,7 +45,7 @@ export class ProfileObserver extends UAObserver {
 	private observed(mutations: MutationRecord[]) {
 		for (const added of mutations.flatMap((m) => Array.from(m.addedNodes))) {
 			if (!(added instanceof HTMLElement)) continue;
-			if (added.querySelector('.timeline-body') !== null) {
+			if (added.querySelector(SLCT.PF_CARDS) !== null) {
 				DEBUG.log('detected profile change');
 				this.timeline_obs.disconnect();
 				this.timeline_obs.observe();
@@ -69,7 +65,7 @@ class ProfileTLObserver extends InsertableObserver {
 	protected stopped_msg = 'profile timeline observer stopped';
 
 	protected get target(): HTMLElement | null {
-		return document.querySelector('.timeline-body > div');
+		return document.querySelector(SLCT.PF_CARDS);
 	}
 	protected get options(): MutationObserverInit {
 		return { childList: true };

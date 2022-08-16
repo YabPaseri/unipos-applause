@@ -1,5 +1,5 @@
 import { Applause } from '../components';
-import { CLS, selector } from '../styles';
+import { CLS, SLCT } from '../styles';
 import Util, { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -17,7 +17,8 @@ export class DisableObserver extends UAObserver {
 	}
 
 	protected start(): boolean {
-		const target = document.getElementById('content');
+		// SLCTには '#' 付きで書かれているので...
+		const target = document.getElementById(SLCT.CONTENT.substring(1));
 		if (!target) return false;
 		this.mutation_obs.observe(target, { subtree: true, attributes: true, attributeFilter: ['class'], attributeOldValue: true });
 		DEBUG.log('disable observer started');
@@ -44,8 +45,8 @@ export class DisableObserver extends UAObserver {
 				// その子孫にある 拍手+ を探す
 				Util.ancestor(mutation.target, (ele) => {
 					const c = ele.classList.contains.bind(ele.classList);
-					return c('clap') && c('cf') && c(CLS.APPLAUSE_PARENT);
-				})?.querySelector<HTMLElement>(selector(CLS.CLAP) + selector(CLS.APPLAUSE));
+					return c(CLS.CLAP_PARENT_1) && c(CLS.CLAP_PARENT_2) && c(CLS.APPLAUSE_PARENT);
+				})?.querySelector<HTMLElement>(SLCT.clsfy(CLS.CLAP, CLS.APPLAUSE));
 
 			if (applause) {
 				Applause.disable(applause, next);

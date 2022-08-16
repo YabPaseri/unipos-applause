@@ -1,5 +1,5 @@
 import { Options, ROptions } from '../options';
-import { CLS, selector } from '../styles';
+import { CLS, SLCT } from '../styles';
 import { DEBUG, EBuilder } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -28,8 +28,8 @@ export class SideMenuObserver extends UAObserver {
 	}
 
 	protected start(): boolean {
-		const hamburger = document.querySelector<HTMLElement>('.c-sideHamburgerBtn');
-		const sidemenu = document.querySelector<HTMLElement>('.c-side.sideMenu');
+		const hamburger = document.querySelector<HTMLElement>(SLCT.SIDE_CLOSE);
+		const sidemenu = document.querySelector<HTMLElement>(SLCT.SIDE_MENU);
 		if (!sidemenu || !hamburger) return false;
 		this.resize_obs.observe(hamburger);
 		this.mutation_obs.observe(sidemenu, { attributes: true, attributeFilter: ['class'], attributeOldValue: true });
@@ -71,7 +71,7 @@ export class SideMenuObserver extends UAObserver {
 		}
 	}
 	private updateIsHidden(ele: HTMLElement, init = false) {
-		if (this.is_hidden !== ele.classList.contains('c-is-containerHidden')) {
+		if (this.is_hidden !== ele.classList.contains(CLS.SIDEMENU_HIDDEN)) {
 			this.is_hidden = !this.is_hidden;
 			if (!init) this.draw();
 		}
@@ -79,12 +79,12 @@ export class SideMenuObserver extends UAObserver {
 
 	// あれば既存の要素を返し、なければ作る→挿入する→返す のステップを踏む
 	private get backdrop(): HTMLElement {
-		const b = document.querySelector<HTMLElement>(selector(CLS.SIDEMENU_BACKDROP));
+		const b = document.querySelector<HTMLElement>(SLCT.clsfy(CLS.SIDEMENU_BACKDROP));
 		if (b) return b;
 		const nb = EBuilder.begin('div')
 			.classes(CLS.SIDEMENU_BACKDROP)
 			.event('click', () => {
-				document.querySelector<HTMLButtonElement>('.c-slideButton.c-slideButton-slideLeft')?.click();
+				(<HTMLButtonElement | null | undefined>document.querySelector(SLCT.SIDE_CLOSE)?.firstElementChild)?.click();
 			})
 			.end();
 		document.body.append(nb);

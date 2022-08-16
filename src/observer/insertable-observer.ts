@@ -1,5 +1,5 @@
 import { Applause } from '../components';
-import { CLS, selector } from '../styles';
+import { CLS, SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -44,11 +44,11 @@ export abstract class InsertableObserver extends UAObserver {
 		for (const card of cards) {
 			if (!(card instanceof HTMLElement)) continue;
 
-			const claps_parent = card.querySelector('.clap.cf');
+			const claps_parent = card.querySelector(SLCT.clsfy(CLS.CLAP_PARENT_1, CLS.CLAP_PARENT_2));
 			if (!claps_parent) continue;
 
 			const clap = (() => {
-				const claps = claps_parent.querySelectorAll(selector(CLS.CLAP));
+				const claps = claps_parent.querySelectorAll(SLCT.clsfy(CLS.CLAP));
 				return claps.length === 1 ? claps[0] : void 0;
 			})();
 			if (!clap) continue;

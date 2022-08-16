@@ -1,3 +1,4 @@
+import { SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -7,10 +8,7 @@ import { UAObserver } from './ua-observer';
  */
 export class HighlightsObserver extends UAObserver {
 	public static runnable(): boolean {
-		return (
-			document.querySelector('div.teamHighlights___teamHighlights--teamHighlights') !== null || // 新
-			document.querySelector('div.teamHighlights') !== null // 旧
-		);
+		return document.querySelector(SLCT.TH_PROOF) !== null;
 	}
 
 	protected start(): boolean {

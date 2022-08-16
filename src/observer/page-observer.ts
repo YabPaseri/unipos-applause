@@ -1,4 +1,5 @@
 import { Options } from '../options';
+import { SLCT } from '../styles';
 import Util, { DEBUG } from '../util';
 import { HighlightsObserver } from './highlights-observer';
 import { MemberInfoObserver } from './member-info-observer';
@@ -26,7 +27,7 @@ export class PageObserver extends UAObserver {
 	protected start(): boolean {
 		// ヘッダーに表示される「タイムライン」「名投稿まとめ」「設定」の文字の変化で検知する。
 		// 「プロフィール」に該当する場合は空欄となる。
-		const target = document.querySelector('div.header_h1Container > div');
+		const target = document.querySelector(SLCT.PAGE_TITLE);
 		if (!target) return false;
 		this.mutation_obs.observe(target, { childList: true, characterData: true, subtree: true });
 		this.observed(); // 初回

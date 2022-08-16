@@ -1,5 +1,6 @@
 import { Applause } from '../components';
 import { Options } from '../options';
+import { CLS } from '../styles';
 import UniposAPI from '../unipos';
 import Util, { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
@@ -34,7 +35,7 @@ export class ApplauseClickObserver extends UAObserver {
 
 		const card = Util.ancestor(ev.target, (ele) => {
 			const c = ele.classList.contains.bind(ele.classList);
-			return c('cardModal') || c('card');
+			return c(CLS.CARD_MODAL) || c(CLS.CARD);
 		});
 		if (!card) return;
 

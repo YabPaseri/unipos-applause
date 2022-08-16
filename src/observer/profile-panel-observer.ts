@@ -1,5 +1,6 @@
 import { ProfileMenu } from '../components';
 import { Options } from '../options';
+import { CLS, SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -17,7 +18,7 @@ export class ProfilePanelObserver extends UAObserver {
 	}
 
 	protected start(): boolean {
-		const target = document.querySelector('.c-headerProfile.headerProfile');
+		const target = document.querySelector(SLCT.HEADER_PROFILE);
 		if (!target) return false;
 		this.mutation_obs.observe(target, { childList: true });
 		DEBUG.log('profile panel observer started');
@@ -31,7 +32,7 @@ export class ProfilePanelObserver extends UAObserver {
 	private observed(mutations: MutationRecord[]) {
 		for (const added of mutations.flatMap((m) => Array.from(m.addedNodes))) {
 			if (!(added instanceof HTMLElement)) continue;
-			if (added.classList.contains('c-headerProfile_panel') && added.classList.contains('is-active')) {
+			if (added.classList.contains(CLS.HEADER_PROFILE_PANEL)) {
 				DEBUG.log('detected profile panel open');
 				this.insert(added);
 				break;
@@ -47,8 +48,8 @@ export class ProfilePanelObserver extends UAObserver {
 		const e_check = ProfilePanelObserver.CHECKBOX_ACTIVE_ICON; // e(nable)-check = チェックされた
 
 		// サイドメニューにバックドロップを表示
-		const wrapper = ele.querySelector('.c-headerProfile_menuGroup-includeLogout');
-		const settings = wrapper?.querySelector('.c-headerProfile_menu-config');
+		const wrapper = ele.querySelector(SLCT.HEADER_PROFILE_LOGOUT_GROUP);
+		const settings = wrapper?.querySelector(SLCT.HEADER_PROFILE_MENU_CONFIG);
 		if (wrapper && settings) {
 			const sidemenu_ol = ProfileMenu.create(
 				Options.SIDEMENU_BACKDROP ? e_check : d_check,

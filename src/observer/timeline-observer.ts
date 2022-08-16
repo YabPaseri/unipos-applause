@@ -1,3 +1,4 @@
+import { SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { InsertableObserver } from './insertable-observer';
 
@@ -7,14 +8,14 @@ import { InsertableObserver } from './insertable-observer';
  */
 export class TimelineObserver extends InsertableObserver {
 	public static runnable(): boolean {
-		return document.querySelector('div.pageNav') !== null;
+		return document.querySelector(SLCT.TL_PROOF) !== null;
 	}
 
 	protected started_msg = 'timeline observer started';
 	protected stopped_msg = 'timeline observer stopped';
 
 	protected get target(): HTMLElement | null {
-		return document.querySelector('div.cards');
+		return document.querySelector(SLCT.TL_CARDS);
 	}
 	protected get options(): MutationObserverInit {
 		return { childList: true };

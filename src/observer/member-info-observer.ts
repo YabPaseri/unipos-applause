@@ -1,3 +1,4 @@
+import { SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
 
@@ -7,10 +8,7 @@ import { UAObserver } from './ua-observer';
  */
 export class MemberInfoObserver extends UAObserver {
 	public static runnable(): boolean {
-		return (
-			document.querySelector('div.memberInfo___memberInfo--memberInfo') !== null || // 新
-			document.querySelector('div.memberInfo') !== null // 旧
-		);
+		return document.querySelector(SLCT.MI_PROOF) !== null;
 	}
 
 	protected start(): boolean {

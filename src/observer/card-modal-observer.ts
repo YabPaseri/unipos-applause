@@ -1,3 +1,4 @@
+import { CLS, SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { InsertableObserver } from './insertable-observer';
 
@@ -11,7 +12,7 @@ export class CardModalObserver extends InsertableObserver {
 	protected stopped_msg = 'card modal observer stopped';
 
 	protected get target(): HTMLElement | null {
-		return document.getElementById('content');
+		return document.getElementById(SLCT.CONTENT.substring(1));
 	}
 	protected get options(): MutationObserverInit {
 		return { childList: true };
@@ -20,7 +21,7 @@ export class CardModalObserver extends InsertableObserver {
 	protected observed(mutations: MutationRecord[]): void {
 		for (const added of mutations.flatMap((m) => Array.from(m.addedNodes))) {
 			if (!(added instanceof HTMLElement)) continue;
-			if (added.classList.contains('cardModalBackGround')) {
+			if (added.classList.contains(CLS.CARD_MODAL_BG)) {
 				DEBUG.log('detected card modal open');
 				this.insert(added);
 				break;
