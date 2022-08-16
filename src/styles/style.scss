@@ -54,3 +54,14 @@
 .c-headerProfile_menu {
 	user-select: none;
 }
+
+// 2022-08-16
+// ↓が書かれた<style/>より後に、通常時の<style/>を書いてあるので
+// メディアクエリによるスタイルが反映されないバグが起きているようだ。
+// サイドメニューを出したら閉じれない...のは困るので、
+// 無理やりではあるが拡張機能側で暫定対応。
+@media screen and (max-width: 1212px) {
+	.c-sideHamburgerBtn {
+		display: block !important;
+	}
+}
