@@ -44,7 +44,7 @@ export class SLCT {
 	/**
 	 * サイドメニュー
 	 */
-	public static readonly SIDE_MENU = '.c-side.sideMenu';
+	public static readonly SIDE_MENU = '.c-side';
 
 	/**
 	 * サイドメニューの閉じるボタン
