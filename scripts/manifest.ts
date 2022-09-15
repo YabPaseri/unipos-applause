@@ -7,10 +7,20 @@ import pkg from '../package.json';
  * 補完が効くので、ts で生成している。
  */
 (() => {
+	const [version_name, version] = (() => {
+		const version_regex = /^(\d+\.\d+\.\d+).*$/;
+		const result = pkg.version.match(version_regex);
+		if (!result || !result[0] || !result[1]) {
+			throw new Error('package version is invalid');
+		}
+		return [result[0], result[1]];
+	})();
+
 	const manifest: chrome.runtime.ManifestV3 = {
 		manifest_version: 3,
 		name: 'Unipos Applause',
-		version: pkg.version,
+		version,
+		version_name,
 
 		// default_locale: 'ja',
 		description: pkg.description,
