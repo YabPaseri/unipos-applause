@@ -17,6 +17,7 @@ export class ProfileMenu {
 		return EBuilder.begin('a')
 			.if(title !== void 0)
 			.title(<string>title)
+			.fi()
 			.classes(CLS.HEADER_PROFILE_MENU)
 			.child(EBuilder.begin('img').src(src))
 			.child(EBuilder.begin('span').itext(innerText))

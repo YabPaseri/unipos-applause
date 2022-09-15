@@ -13,6 +13,7 @@ export class Applause {
 			.classes(CLS.CLAP, CLS.APPLAUSE)
 			.if(disabled)
 			.classes(CLS.DISABLE)
+			.fi()
 			.child(EBuilder.begin('span').text('+'))
 			.end();
 	}

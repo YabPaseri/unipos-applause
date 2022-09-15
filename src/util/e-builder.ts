@@ -4,20 +4,19 @@
 export class EBuilder<K extends keyof HTMLElementTagNameMap> {
 	private constructor(
 		private e: HTMLElementTagNameMap[K], //
-		private next = true
+		private skip = false
 	) {}
 	public static begin<K extends keyof HTMLElementTagNameMap>(tag: K): EBuilder<K> {
 		return new EBuilder(document.createElement(tag));
 	}
 
 	public if(test: boolean | (() => boolean)): this {
-		this.next = typeof test === 'function' ? test() : test;
+		this.skip = typeof test === 'function' ? !test() : !test;
 		return this;
 	}
-	private get skip(): boolean {
-		if (this.next) return false;
-		this.next = true;
-		return true;
+	public fi(): this {
+		this.skip = false;
+		return this;
 	}
 
 	public title(title: string): this {
