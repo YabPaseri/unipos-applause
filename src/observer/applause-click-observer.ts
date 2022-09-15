@@ -1,4 +1,4 @@
-import { Applause } from '../components';
+import { Applause } from '../elements';
 import { Options } from '../options';
 import { CLS } from '../styles';
 import UniposAPI from '../unipos';

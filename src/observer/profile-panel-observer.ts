@@ -1,4 +1,4 @@
-import { ProfileMenu } from '../components';
+import { ProfileMenu } from '../elements';
 import { Options } from '../options';
 import { CLS, SLCT } from '../styles';
 import { DEBUG } from '../util';

@@ -1,4 +1,4 @@
-import { Applause } from '../components';
+import { Applause } from '../elements';
 import { CLS, SLCT } from '../styles';
 import { DEBUG } from '../util';
 import { UAObserver } from './ua-observer';
