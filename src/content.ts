@@ -1,3 +1,4 @@
+import BulkSender from './bulk-sender';
 import { ApplauseClickObserver } from './observer/applause-click-observer';
 import { CardModalObserver } from './observer/card-modal-observer';
 import { DisableObserver } from './observer/disable-observer';
@@ -28,7 +29,11 @@ import { DEBUG } from './util';
 		if (i !== 0) await new Promise((ok) => setTimeout(ok, Options.TRY_INTERVAL));
 		if ((success = obss.observe())) break;
 	}
-	if (!success) {
+
+	if (success) {
+		// 全オブザーバーが起動した = Uniposのページ
+		BulkSender.on();
+	} else {
 		obss.disconnect();
 		DEBUG.log('extension stopped');
 	}
