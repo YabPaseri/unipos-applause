@@ -24,7 +24,7 @@ const option: CallableOption = (_env, argv) => {
 
 		resolve: {
 			// 使用する拡張子
-			extensions: ['.js', '.ts'],
+			extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		},
 
 		// バンドル処理の起点
@@ -46,7 +46,7 @@ const option: CallableOption = (_env, argv) => {
 			rules: [
 				{
 					// ts ファイルを babel-loader で処理
-					test: /\.ts$/,
+					test: /\.tsx?$/,
 					exclude: /node_modules/,
 					use: {
 						loader: 'babel-loader',
@@ -61,6 +61,7 @@ const option: CallableOption = (_env, argv) => {
 										modules: false,
 									},
 								],
+								'@babel/preset-react',
 								'@babel/preset-typescript',
 							],
 							plugins: ['@babel/plugin-transform-runtime'],
