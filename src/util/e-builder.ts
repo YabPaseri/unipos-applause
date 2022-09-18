@@ -25,6 +25,12 @@ export class EBuilder<K extends keyof HTMLElementTagNameMap> {
 		return this;
 	}
 
+	public id(id: string): this {
+		if (this.skip) return this;
+		this.e.id = id;
+		return this;
+	}
+
 	public classes(...classes: string[]): this {
 		if (this.skip) return this;
 		this.e.classList.add(...classes);

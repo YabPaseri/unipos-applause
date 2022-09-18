@@ -55,6 +55,10 @@
 	user-select: none;
 }
 
+body.ua-hidden-root .ua-hidden {
+	opacity: 0 !important;
+}
+
 // 2022-08-16
 // ↓が書かれた<style/>より後に、通常時の<style/>を書いてあるので
 // メディアクエリによるスタイルが反映されないバグが起きているようだ。

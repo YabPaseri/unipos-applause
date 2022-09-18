@@ -75,6 +75,15 @@ export class CLS {
 	 * モーダルで表示される投稿
 	 */
 	public static readonly CARD_MODAL = 'cardModal';
+
+	/**
+	 * bodyに付けることで、対応するクラスを持つ要素を非表示にする
+	 */
+	public static readonly HIDDEN_ROOT = 'ua-hidden-root';
+	/**
+	 * CLS.HIDDEN_ROOT をbodyが持つときに、非表示にする
+	 */
+	public static readonly HIDDEN = 'ua-hidden';
 }
 
 /**

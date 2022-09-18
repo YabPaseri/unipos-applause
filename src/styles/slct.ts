@@ -70,4 +70,9 @@ export class SLCT {
 	 * 全体を囲む親。
 	 */
 	public static readonly CONTENT = '#content';
+
+	/**
+	 * 右下に表示されるサポートのボタン
+	 */
+	public static readonly SUPPORT = '#launcher';
 }

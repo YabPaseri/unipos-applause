@@ -1,3 +1,5 @@
+import { CLS } from '../styles';
+
 export class Util {
 	/**
 	 * 引数が正の整数であるか
@@ -75,5 +77,15 @@ export class Util {
 					return u + v;
 			}
 		}, '');
+	}
+
+	/**
+	 * bodyに特定クラスを持つ要素を非表示にするクラスを付ける。\
+	 * 引数がfalseなら外す。
+	 */
+	public static hidden(on = true) {
+		const l = document.body.classList;
+		if (on) l.add(CLS.HIDDEN_ROOT);
+		else l.remove(CLS.HIDDEN_ROOT);
 	}
 }
