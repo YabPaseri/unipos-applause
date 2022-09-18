@@ -15,6 +15,7 @@
   "author": "YabPaseri",
   "scripts": {
     "ts-node": "ts-node -r tsconfig-paths/register",
+	"build-tools": "webpack --config webpack.tools.ts",
     "prebuild-dev": "rimraf dist/*",
     "build-dev": "run-p build-dev:webpack make:*",
     "build-dev:webpack": "npm run webpack -- --mode development",
