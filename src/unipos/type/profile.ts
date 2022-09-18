@@ -1,7 +1,8 @@
 import { TMe } from './member';
+import { TTeam } from './team';
 
 export type TProfile = {
-	// team
 	// groups
+	team: TTeam;
 	member: TMe;
 };
