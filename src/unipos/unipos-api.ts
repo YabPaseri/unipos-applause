@@ -1,5 +1,7 @@
 import JSONRPC, { JSONRPCSuccess } from '../jsonrpc';
 import { Empty, TCard, TCardsItem, TProfile } from './type';
+import { TDepartment } from './type/department';
+import { TTag } from './type/tag';
 import { UniposAPIError } from './unipos-api-error';
 
 export class UniposAPI {
@@ -42,6 +44,34 @@ export class UniposAPI {
 	}
 
 	/**
+	 * チームハッシュタグ一覧を得る
+	 */
+	public static getTags(): Promise<JSONRPCSuccess<TTag[]>> {
+		const url = 'https://unipos.me/jsonrpc?method=Unipos.GetTags';
+		const method = 'Unipos.GetTags';
+		return this.call(url, method, method, {});
+	}
+
+	/**
+	 * 部署一覧を得る
+	 */
+	public static getDepartments(): Promise<JSONRPCSuccess<TDepartment[]>> {
+		const url = 'https://unipos.me/jsonrpc?method=Unipos.GetDepartments';
+		const method = 'Unipos.GetDepartments';
+		return this.call(url, method, method, {});
+	}
+
+	/**
+	 * ワードから、ユーザ名を検索する\
+	 * limit は default:51。本家にそろえてある。
+	 */
+	public static getMembersByNameWithFuzzySearch(name: string, limit = 51) {
+		const url = 'https://unipos.me/jsonrpc?method=Unipos.GetMembersByNameWithFuzzySearch';
+		const method = 'Unipos.GetMembersByNameWithFuzzySearch';
+		return this.call(url, method, method, { name, limit });
+	}
+
+	/**
 	 * 投稿の詳細情報を得る
 	 * @param card_id 投稿のID
 	 */
@@ -81,6 +111,8 @@ export class UniposAPI {
 }
 
 export type GetCardsOptions = {
+	group_ids?: string[]; //       {id}の部署が関係する
+	tag_name?: string; //          {name}のタグを持つ
 	to_member_id?: string; //      {id}が受け取った
 	from_member_id?: string; //    {id}が送った
 	praised_member_id?: string; // {id}が拍手した
