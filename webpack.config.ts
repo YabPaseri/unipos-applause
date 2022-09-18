@@ -61,10 +61,31 @@ const option: CallableOption = (_env, argv) => {
 										modules: false,
 									},
 								],
-								'@babel/preset-react',
+								['@babel/preset-react', { runtime: 'automatic' }],
 								'@babel/preset-typescript',
 							],
-							plugins: ['@babel/plugin-transform-runtime'],
+							plugins: [
+								'@babel/plugin-transform-runtime',
+								// https://mui.com/material-ui/guides/minimizing-bundle-size/#option-two-use-a-babel-plugin
+								[
+									'babel-plugin-import',
+									{
+										libraryName: '@mui/material',
+										libraryDirectory: '',
+										camel2DashComponentName: false,
+									},
+									'core',
+								],
+								[
+									'babel-plugin-import',
+									{
+										libraryName: '@mui/icons-material',
+										libraryDirectory: '',
+										camel2DashComponentName: false,
+									},
+									'icons',
+								],
+							],
 						},
 					},
 				},
