@@ -15,7 +15,7 @@
   "author": "YabPaseri",
   "scripts": {
     "ts-node": "ts-node -r tsconfig-paths/register",
-	"build-tools": "webpack --config webpack.tools.ts",
+    "build-tools": "webpack --config webpack.tools.ts",
     "prebuild-dev": "rimraf dist/*",
     "build-dev": "run-p build-dev:webpack make:*",
     "build-dev:webpack": "npm run webpack -- --mode development",
@@ -79,6 +79,7 @@
     "@mui/material": "^5.10.5",
     "core-js": "^3.24.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "recoil": "^0.7.5"
   }
 }
