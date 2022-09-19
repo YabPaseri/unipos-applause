@@ -4,23 +4,21 @@ import Icon from '@mdi/react';
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import { memofy } from './memofy';
+import { memofy } from './components/memofy';
+import { useOpenDialog } from './data';
 
-type TProps = {
-	onClick?: React.MouseEventHandler<HTMLButtonElement>;
-};
-
-export const OpenButton = memofy<TProps>(({ onClick }) => {
+export const OpenDialogButton = memofy(() => {
+	const open = useOpenDialog();
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => setMounted(true), []);
 	return (
-		<CSSTransition in={mounted} timeout={200} classNames="transition">
-			<SButton startIcon={<Icon path={mdiHandClap} size="24px" color="white" />} onClick={onClick}>
+		<CSSTransition in={mounted} classNames="transition" timeout={{ exit: 300 }}>
+			<SButton startIcon={<Icon path={mdiHandClap} size="24px" color="white" />} onClick={open}>
 				一括拍手
 			</SButton>
 		</CSSTransition>
 	);
-}, 'OpenButton');
+}, 'OpenDialogButton');
 
 const SButton = styled(Button)({
 	position: 'fixed',
@@ -33,29 +31,21 @@ const SButton = styled(Button)({
 	color: '#ffffff',
 	fontSize: '0.836rem',
 	fontWeight: '700',
+	boxShadow: 'none',
+	backgroundColor: '#00a1e5',
 	transitionDuration: '300ms',
 	transitionTimingFunction: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
 	transitionProperty: 'opacity, top, bottom',
-	opacity: 0,
-	boxShadow: 'none',
-	backgroundColor: '#00a1e5',
 	'&:hover': {
 		boxShadow: 'none',
 		backgroundColor: '#00a1e5',
 	},
-	'&.transition-enter': {
-		opacity: 0,
-	},
-	'&.transition-enter-active': {
-		opacity: 1,
-	},
-	'&.transition-enter-done': {
-		opacity: 1,
-	},
-	'&.transition-exit': {
-		opacity: 1,
-	},
-	'&.transition-exit-active': {
-		opacity: 0,
+	'&.transition': {
+		'&-enter': { opacity: 0 },
+		'&-enter-active': { opacity: 1 },
+		'&-enter-done': { opacity: 1 },
+		'&-exit': { opacity: 1 },
+		'&-exit-active': { opacity: 0 },
+		'&-exit-done': { opacity: 0 },
 	},
 });

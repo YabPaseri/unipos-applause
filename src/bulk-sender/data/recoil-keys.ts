@@ -1,0 +1,3 @@
+export enum RECOIL_ATOM_KEY {
+	OPEN_DIALOG = 'ATOM_OPEN_DIALOG',
+}

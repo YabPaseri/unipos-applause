@@ -1,5 +1,5 @@
 import JSONRPC, { JSONRPCSuccess } from '../jsonrpc';
-import { Empty, TCard, TCardsItem, TProfile } from './type';
+import { Empty, TCard, TCardsItem, TMember, TProfile } from './type';
 import { TDepartment } from './type/department';
 import { TTag } from './type/tag';
 import { UniposAPIError } from './unipos-api-error';
@@ -65,7 +65,7 @@ export class UniposAPI {
 	 * ワードから、ユーザ名を検索する\
 	 * limit は default:51。本家にそろえてある。
 	 */
-	public static getMembersByNameWithFuzzySearch(name: string, limit = 51) {
+	public static getMembersByNameWithFuzzySearch(name: string, limit = 51): Promise<JSONRPCSuccess<TMember[]>> {
 		const url = 'https://unipos.me/jsonrpc?method=Unipos.GetMembersByNameWithFuzzySearch';
 		const method = 'Unipos.GetMembersByNameWithFuzzySearch';
 		return this.call(url, method, method, { name, limit });
