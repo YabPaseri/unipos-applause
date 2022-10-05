@@ -1,0 +1,15 @@
+// 通常
+npm run ver major
+npm run ver minor
+npm run ver patch
+
+// alpha(初回)
+npm run ver premajor --preid alpha
+npm run ver preminor --preid alpha
+npm run ver prepatch --preid alpha
+
+// alpha(2回目以降)
+npm run ver prerelease
+
+// alphaを使う場合は、
+// manifest.json の ext_version に気を付ける(!!ext_version な時、拡張機能のバージョンとして使われる)
