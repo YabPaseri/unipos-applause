@@ -1,90 +1,72 @@
-import { Autocomplete, Checkbox, FormControlLabel, Stack, TextField } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { Autocomplete, TextField } from '@mui/material';
+import React, { useCallback, useRef, useState } from 'react';
 import UniposAPI from '../../unipos';
 import { TMember } from '../../unipos/type';
 import { memofy } from './memofy';
 
 type TProps = {
 	value: TMember | null;
-	me: boolean;
 	setValue: (value: TMember | null) => void;
-	setMe: (value: boolean) => void;
 	label?: React.ReactNode;
+	title?: string;
+	disabled?: boolean;
 };
 
-export const MemberSearch = memofy<TProps>(({ value, setValue, me, setMe, label }) => {
+export const MemberSearch = memofy<TProps>(({ value, setValue, label, title, disabled }) => {
 	const [candidates, setCandidates] = useState<TMember[]>([]);
-	const [focus, setFocus] = useState(false);
 	const [input, setInput] = useState('');
+	const [hasFocus, setHasFocus] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const handleValueChange = useCallback(
-		(_: unknown, val: TMember | null) => {
-			setValue(val);
-		},
-		[setValue]
-	);
-	const doFocus = useCallback(() => setFocus(true), []);
-	const doBlur = useCallback(() => setFocus(false), []);
-	const noFilter = useCallback((op: TMember[]) => op, []);
-	const eq = useCallback((op: TMember, val: TMember) => op.id === val.id, []);
-	const labelfy = useCallback((op: TMember) => `${op.display_name} (@${op.uname})`, []);
+	const timer = useRef<NodeJS.Timeout | null>(null);
+	const handleValueChange = useCallback((_: unknown, val: TMember | null) => setValue(val), [setValue]);
 	const handleInputChange = useCallback((_: unknown, val: string) => {
 		setInput(val);
+		if (timer.current) {
+			clearTimeout(timer.current);
+			timer.current = null;
+		}
 		if (val.length === 0) {
 			setCandidates([]);
 			return;
 		}
-		Promise.resolve()
-			.then(() => setLoading(true))
-			.then(() => UniposAPI.getMembersByNameWithFuzzySearch(val))
-			.then((res) => setCandidates(res.result))
-			.then(() => setLoading(false));
+		timer.current = setTimeout(() => {
+			Promise.resolve()
+				.then(() => setLoading(true))
+				.then(() => UniposAPI.getMembersByNameWithFuzzySearch(val))
+				.then((res) => setCandidates(res.result))
+				.then(() => setLoading(false));
+		}, 1000);
 	}, []);
-	const handleMeChange = useCallback(
-		(_: unknown, checked: boolean) => {
-			setMe(checked);
-			if (checked) {
-				setFocus(false);
-			}
-		},
-		[setMe]
-	);
+
+	const handleFocus = useCallback(() => setHasFocus(true), []);
+	const handleBlur = useCallback(() => setHasFocus(false), []);
+	const filter = useCallback((opt: TMember[]) => opt, []); //do not anything
+	const equals = useCallback((opt: TMember, val: TMember) => opt.id === val.id, []);
+	const labels = useCallback((opt: TMember) => `${opt.display_name}`, []);
 
 	return (
-		<Stack direction="row" spacing="5px">
-			<Autocomplete
-				sx={{ flex: 1 }}
-				disabled={me}
-				value={value}
-				onChange={handleValueChange}
-				inputValue={input}
-				onInputChange={handleInputChange}
-				open={focus && input.length !== 0}
-				onOpen={doFocus}
-				onClose={doBlur}
-				filterOptions={noFilter}
-				isOptionEqualToValue={eq}
-				getOptionLabel={labelfy}
-				options={candidates}
-				loading={loading}
-				size="small"
-				renderInput={(params) => (
-					<TextField
-						{...params}
-						margin="normal"
-						label={label}
-						InputLabelProps={{ ...params.InputLabelProps, shrink: true }}
-					/>
-				)}
-			/>
-			<FormControlLabel
-				sx={{ paddingTop: '8px' }}
-				value={me}
-				label="自分を設定"
-				control={<Checkbox size="small" />}
-				onChange={handleMeChange}
-			/>
-		</Stack>
+		<Autocomplete
+			blurOnSelect
+			sx={{ flex: 1 }}
+			value={value}
+			onChange={handleValueChange}
+			onFocus={handleFocus}
+			onBlur={handleBlur}
+			inputValue={input}
+			onInputChange={handleInputChange}
+			open={hasFocus && input.length !== 0}
+			filterOptions={filter}
+			isOptionEqualToValue={equals}
+			getOptionLabel={labels}
+			options={candidates}
+			loading={loading}
+			size="small"
+			renderInput={(params) => (
+				<TextField {...params} label={label} InputLabelProps={{ ...params.InputLabelProps, shrink: true }} />
+			)}
+			title={title}
+			disabled={disabled}
+		/>
 	);
 }, 'MemberSearch');

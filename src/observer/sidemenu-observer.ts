@@ -84,7 +84,7 @@ export class SideMenuObserver extends UAObserver {
 		const nb = EBuilder.begin('div')
 			.classes(CLS.SIDEMENU_BACKDROP)
 			.event('click', () => {
-				(<HTMLButtonElement | null | undefined>document.querySelector(SLCT.SIDE_CLOSE)?.firstElementChild)?.click();
+				(<HTMLButtonElement | null | undefined>document.querySelector(SLCT.SIDE_CLOSE))?.click();
 			})
 			.end();
 		document.body.append(nb);

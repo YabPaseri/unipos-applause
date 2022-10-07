@@ -62,6 +62,21 @@ export class Options {
 	}
 
 	/**
+	 * β機能を使用する
+	 */
+	public static get BETA(): boolean {
+		return this.e.BETA;
+	}
+	public static set BETA(v: boolean) {
+		if (typeof v !== 'boolean') {
+			throw new TypeError('Options.BETA accepts only boolean.');
+		}
+		if (this.e.BETA !== v) {
+			this.notify((e) => (e.BETA = v));
+		}
+	}
+
+	/**
 	 * DOMから要素を探す間隔(ms)
 	 */
 	public static get TRY_INTERVAL(): number {
@@ -160,6 +175,7 @@ export type ROptions = Readonly<OptionsEntity>;
  */
 class OptionsEntity {
 	public DEBUG: boolean;
+	public BETA: boolean;
 	public TRY_INTERVAL: number;
 	public TRY_LIMIT: number;
 	public NO_CHECK: boolean;
@@ -167,7 +183,8 @@ class OptionsEntity {
 	public SIDEMENU_BACKDROP: boolean;
 
 	constructor(v: {
-		DEBUG?: boolean; //
+		DEBUG?: boolean;
+		BETA?: boolean;
 		TRY_INTERVAL?: number;
 		TRY_LIMIT?: number;
 		NO_CHECK?: boolean;
@@ -175,6 +192,7 @@ class OptionsEntity {
 		SIDEMENU_BACKDROP?: boolean;
 	}) {
 		this.DEBUG = typeof v.DEBUG === 'boolean' && v.DEBUG;
+		this.BETA = typeof v.BETA === 'boolean' && v.BETA;
 		this.TRY_INTERVAL = Util.isPositiveInt(v.TRY_INTERVAL) ? <number>v.TRY_INTERVAL : 250;
 		this.TRY_LIMIT = Util.isPositiveInt(v.TRY_LIMIT) ? <number>v.TRY_LIMIT : 40;
 		this.NO_CHECK = typeof v.NO_CHECK === 'boolean' && v.NO_CHECK;

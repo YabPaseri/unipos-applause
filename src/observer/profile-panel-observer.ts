@@ -48,8 +48,8 @@ export class ProfilePanelObserver extends UAObserver {
 		const e_check = ProfilePanelObserver.CHECKBOX_ACTIVE_ICON; // e(nable)-check = チェックされた
 
 		// サイドメニューにバックドロップを表示
-		const wrapper = ele.querySelector(SLCT.HEADER_PROFILE_LOGOUT_GROUP);
-		const settings = wrapper?.querySelector(SLCT.HEADER_PROFILE_MENU_CONFIG);
+		const wrapper = ele.querySelectorAll(SLCT.HEADER_PROFILE_LOGOUT_GROUP)[1];
+		const settings = wrapper?.firstElementChild;
 		if (wrapper && settings) {
 			const sidemenu_ol = ProfileMenu.create(
 				Options.SIDEMENU_BACKDROP ? e_check : d_check,

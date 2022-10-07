@@ -44,22 +44,23 @@ export class SLCT {
 	/**
 	 * サイドメニュー
 	 */
-	public static readonly SIDE_MENU = '.c-side';
+	public static readonly SIDE_MENU = '.sh-c-sideMenu-generalMenu-container';
 
 	/**
 	 * サイドメニューの閉じるボタン
 	 */
-	public static readonly SIDE_CLOSE = '.c-sideHamburgerBtn';
+	public static readonly SIDE_CLOSE = '.sh-c-hamburgerButton-button';
 
 	/**
 	 * ヘッダーのプロフィール
 	 */
-	public static readonly HEADER_PROFILE = '.c-headerProfile.headerProfile';
+	public static readonly HEADER_PROFILE = '.sh-c-header-profilePanel-profilePanel.headerProfile';
 
 	/**
-	 * ヘッダーのプロフィールアイコンを押すと出てくるメニューで、ログアウトのあるエリア
+	 * ヘッダーのプロフィールアイコンを押すと出てくるメニューで、\
+	 * マイページ・ダッシュボード、設定・ログアウト などのまとまり。\
 	 */
-	public static readonly HEADER_PROFILE_LOGOUT_GROUP = '.c-headerProfile_menuGroup-includeLogout';
+	public static readonly HEADER_PROFILE_LOGOUT_GROUP = '.sh-c-header-profilePanel-profilePanel_menuGroup';
 
 	/**
 	 * ヘッダーのプロフィールアイコンを押すと出てくるメニューにある、設定ボタン
@@ -75,4 +76,9 @@ export class SLCT {
 	 * 右下に表示されるサポートのボタン
 	 */
 	public static readonly SUPPORT = '#launcher';
+
+	/**
+	 * 通知領域
+	 */
+	public static readonly NOTIFY = '.timeline___timeline--timeline_flashMessage > div';
 }

@@ -1,8 +1,8 @@
-import { Dialog, DialogContent, Grid } from '@mui/material';
+import { Dialog, DialogContent } from '@mui/material';
 import Util from '../util';
 import { memofy } from './components';
-import { Control } from './control';
 import { useCloseDialog, useOpenedDialog } from './data';
+import { Dev2 } from './Dev2';
 
 export const SenderDialog = memofy(() => {
 	const is_open = useOpenedDialog();
@@ -20,12 +20,7 @@ export const SenderDialog = memofy(() => {
 			}}
 		>
 			<DialogContent>
-				<Grid container>
-					<Grid item xs={6}>
-						<Control />
-					</Grid>
-					<Grid item xs={6}></Grid>
-				</Grid>
+				<Dev2 />
 			</DialogContent>
 		</Dialog>
 	);

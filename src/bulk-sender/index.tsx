@@ -18,7 +18,7 @@ export default class BulkSender extends React.Component {
 
 	static #on = false;
 	public static async on() {
-		if (this.#on) return;
+		if (this.#on || !Options.BETA) return;
 		// 「サポート」の要素が見つかるまで待機。
 		while (!document.querySelector(SLCT.SUPPORT)) {
 			await new Promise((ok) => setTimeout(ok, Options.TRY_INTERVAL));

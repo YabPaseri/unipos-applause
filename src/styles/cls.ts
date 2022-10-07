@@ -44,7 +44,7 @@ export class CLS {
 	/**
 	 * サイドメニューが非表示状態であることを表すクラス(Unipos)
 	 */
-	public static readonly SIDEMENU_HIDDEN = 'c-is-containerHidden';
+	public static readonly SIDEMENU_HIDDEN = 'sh-c-sideMenu-generalMenu-is-hidden';
 
 	/**
 	 * サイドメニューのz-index的な後ろに追加する背景(Extension)
@@ -59,12 +59,12 @@ export class CLS {
 	/**
 	 * ヘッダーのプロフィールアイコンを押すと表示されるメニュー
 	 */
-	public static readonly HEADER_PROFILE_PANEL = 'c-headerProfile_panel';
+	public static readonly HEADER_PROFILE_PANEL = 'sh-c-header-profilePanel-profilePanel_panel';
 
 	/**
 	 * ヘッダーのプロフィールアイコンを押すと表示されるメニューのアイテム
 	 */
-	public static readonly HEADER_PROFILE_MENU = 'c-headerProfile_menu';
+	public static readonly HEADER_PROFILE_MENU = 'sh-c-header-profilePanel-profilePanel_menu';
 
 	/**
 	 * モーダルで表示される投稿の背景
@@ -75,6 +75,19 @@ export class CLS {
 	 * モーダルで表示される投稿
 	 */
 	public static readonly CARD_MODAL = 'cardModal';
+
+	/**
+	 * Unipos標準の通知を表示するクラス
+	 */
+	public static readonly NOTIFY_ACTIVE = 'sh-c-deprecated-flashMessage-c-flashMessage';
+	/**
+	 * Unipos標準の通知を成功表示にするクラス
+	 */
+	public static readonly NOTIFY_SUCCESS = 'is-succeeded';
+	/**
+	 * Unipos標準の通知の文字列を囲むdivに付与するクラス
+	 */
+	public static readonly NOTIFY_MESSAGE = 'sh-c-deprecated-flashMessage-c-flashMessageText';
 
 	/**
 	 * bodyに付けることで、対応するクラスを持つ要素を非表示にする

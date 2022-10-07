@@ -1,4 +1,6 @@
 import JSONRPC, { JSONRPCSuccess } from '../jsonrpc';
+import { CLS, SLCT } from '../styles';
+import { EBuilder } from '../util';
 import { Empty, TCard, TCardsItem, TMember, TProfile } from './type';
 import { TDepartment } from './type/department';
 import { TTag } from './type/tag';
@@ -7,6 +9,18 @@ import { UniposAPIError } from './unipos-api-error';
 export class UniposAPI {
 	public static get PRAISE_LIMIT() {
 		return 60;
+	}
+
+	public static notify(message: string) {
+		const ele = document.querySelector(SLCT.NOTIFY);
+		if (!ele || ele.classList.contains(CLS.NOTIFY_ACTIVE)) return;
+		const msg = EBuilder.begin('div').classes(CLS.NOTIFY_MESSAGE).text(message).end();
+		ele.classList.add(CLS.NOTIFY_ACTIVE, CLS.NOTIFY_SUCCESS);
+		ele.append(msg);
+		setTimeout(() => {
+			ele.firstChild?.remove();
+			ele.classList.remove(CLS.NOTIFY_ACTIVE, CLS.NOTIFY_SUCCESS);
+		}, 5000);
 	}
 
 	/**

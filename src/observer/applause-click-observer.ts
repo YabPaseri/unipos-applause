@@ -14,10 +14,13 @@ export class ApplauseClickObserver extends UAObserver {
 	constructor() {
 		super();
 		this.booked = false;
+		this.clickListener = this.clickListener.bind(this);
+		this.contextListener = this.contextListener.bind(this);
 	}
 
 	protected start(): boolean {
 		document.body.addEventListener('click', this.clickListener);
+		document.body.addEventListener('contextmenu', this.contextListener);
 		DEBUG.log('click observer started');
 		return true;
 	}
@@ -26,9 +29,7 @@ export class ApplauseClickObserver extends UAObserver {
 		DEBUG.log('click observer stopped');
 	}
 
-	private clickListener = this.click.bind(this);
-	private click(ev: MouseEvent) {
-		if (this.booked) return;
+	private evToCardId(ev: MouseEvent) {
 		if (!(ev.target instanceof HTMLElement) || !Applause.is(ev.target)) return;
 		ev.preventDefault();
 		ev.stopPropagation();
@@ -37,21 +38,31 @@ export class ApplauseClickObserver extends UAObserver {
 			const c = ele.classList.contains.bind(ele.classList);
 			return c(CLS.CARD_MODAL) || c(CLS.CARD);
 		});
-		if (!card) return;
+		if (!card) return void 0;
+		if (card.id) return card.id;
+		const id = card.querySelector('[id]')?.id;
+		// <? class="xxx_base"/> な要素は、
+		// idの末尾にも「_clap_base」がついている。
+		return id ? id.replace(/_clap_base$/, '') : id;
+	}
 
-		const card_id = (() => {
-			if (card.id) return card.id;
-			const id = card.querySelector('[id]')?.id;
-			// <? class="xxx_base"/> な要素は、
-			// idの末尾にも「_clap_base」がついている。
-			return id ? id.replace(/_clap_base$/, '') : id;
-		})();
-		if (!card_id) return;
+	private contextListener(ev: MouseEvent) {
+		const id = this.evToCardId(ev);
+		if (!id) return;
+		window.navigator.clipboard.writeText(id);
+		UniposAPI.notify('投稿のIDをクリップボードにコピーしました');
+	}
+
+	private clickListener(ev: MouseEvent) {
+		if (this.booked) return;
+
+		const id = this.evToCardId(ev);
+		if (!id) return;
 
 		// 非同期処理に入るので、予約済みフラグを立てておく
 		this.booked = true;
-		this.prepare(card_id)
-			.then((count) => this.send(card_id, count))
+		this.prepare(id)
+			.then((count) => this.send(id, count))
 			.then(() => (this.booked = false))
 			.catch((e) => {
 				this.booked = false;
@@ -86,6 +97,18 @@ export class ApplauseClickObserver extends UAObserver {
 
 				const num = Util.parseInt(Util.halve(s));
 				if (Number.isNaN(num)) {
+					if (s === 'developer') {
+						const beta = Options.BETA;
+						Options.BETA = !Options.BETA;
+						Options.save();
+						alert(
+							beta
+								? 'β機能を無効にしました\nページをリロードします。'
+								: 'β機能を有効にしました\nページをリロードします。'
+						);
+						window.history.go(0);
+						return void 0;
+					}
 					helper = '※数値を入力してください。';
 					continue;
 				} else if (num < 1) {
