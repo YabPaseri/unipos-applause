@@ -53,6 +53,20 @@ export const MemberSearch = memo<TProps>(({ value, onChange, label, ...props }) 
 		}
 	}, [handleInputChange, value]);
 
+	const handleBlur = useCallback(() => {
+		// getMembersByNameWithFuzzySearch API を叩くと、タグが作られる。
+		// 検索欄をクリックする度に追加されるのは、邪魔。勝手に消す。
+		document.querySelectorAll('div > script[src="https://tag.web.onesdata.com/od.js"]').forEach((ele) => {
+			ele.parentElement?.remove();
+		});
+		document.querySelectorAll('div > script[src="https://b90.yahoo.co.jp/conv.js"]').forEach((ele) => {
+			ele.parentElement?.remove();
+		});
+		document.querySelectorAll('div > script[src="https://s.yimg.jp/images/listing/tool/cv/ytag.js"]').forEach((ele) => {
+			ele.parentElement?.remove();
+		});
+	}, []);
+
 	const filterOptions = useCallback((opt: Member[]) => opt, []);
 	const isOptionEqualToValue = useCallback((a: Member, b: Member) => a.id === b.id, []);
 	const getOptionLabel = useCallback((opt: Member) => `${opt.display_name} (${opt.uname})`, []);
@@ -72,6 +86,7 @@ export const MemberSearch = memo<TProps>(({ value, onChange, label, ...props }) 
 			onInputChange={handleInputChange}
 			onChange={handleValueChange}
 			onFocus={handleOpen}
+			onBlur={handleBlur}
 			filterOptions={filterOptions}
 			isOptionEqualToValue={isOptionEqualToValue}
 			getOptionLabel={getOptionLabel}

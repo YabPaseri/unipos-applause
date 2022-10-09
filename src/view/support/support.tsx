@@ -30,7 +30,10 @@ export const Support = memo(() => {
 					else setDisabled(true);
 				});
 				obs.observe(parent, { childList: true });
-				return obs.disconnect;
+				return () => {
+					obs.disconnect();
+					UIs.class(iframe, '-', 'HIDDEN');
+				};
 			}
 		}, ms);
 	}, []);
