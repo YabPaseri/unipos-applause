@@ -1,6 +1,7 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { memo, ReactNode, useCallback, useState } from 'react';
+import UIs from '../../ui';
 import UniposAPI from '../../unipos';
 import { Member } from '../../unipos/type';
 
@@ -54,17 +55,13 @@ export const MemberSearch = memo<TProps>(({ value, onChange, label, ...props }) 
 	}, [handleInputChange, value]);
 
 	const handleBlur = useCallback(() => {
-		// getMembersByNameWithFuzzySearch API を叩くと、タグが作られる。
-		// 検索欄をクリックする度に追加されるのは、邪魔。勝手に消す。
-		document.querySelectorAll('div > script[src="https://tag.web.onesdata.com/od.js"]').forEach((ele) => {
-			ele.parentElement?.remove();
-		});
-		document.querySelectorAll('div > script[src="https://b90.yahoo.co.jp/conv.js"]').forEach((ele) => {
-			ele.parentElement?.remove();
-		});
-		document.querySelectorAll('div > script[src="https://s.yimg.jp/images/listing/tool/cv/ytag.js"]').forEach((ele) => {
-			ele.parentElement?.remove();
-		});
+		// getMembersByNameWithFuzzySearchを使うと、body直下に要素が増える。
+		// MemberSearchコンポーネントをクリックする度に増えるので、ぼちぼち邪魔。
+		// 本来ないものだし、勝手に消しちゃおう。右上のUniposオリジナルな検索欄を
+		// 使ったときのも消えちゃうけど...()
+		for (const e of UIs.finds('MEMBER_SEARCHED_ELE_1')) e.parentElement?.remove();
+		for (const e of UIs.finds('MEMBER_SEARCHED_ELE_2')) e.parentElement?.remove();
+		for (const e of UIs.finds('MEMBER_SEARCHED_ELE_3')) e.parentElement?.remove();
 	}, []);
 
 	const filterOptions = useCallback((opt: Member[]) => opt, []);

@@ -15,6 +15,9 @@ export class UIs {
 	public static readonly find = <T extends HTMLElement>(key: keyof typeof SLCT): T | null => {
 		return document.querySelector(SLCT[key]);
 	};
+	public static readonly finds = <T extends HTMLElement>(key: keyof typeof SLCT): NodeListOf<T> => {
+		return document.querySelectorAll(SLCT[key]);
+	};
 
 	public static readonly class = <T extends HTMLElement>(ele: T, mode: '+' | '-', ...cls: (keyof typeof CLS)[]): T => {
 		const list = ele.classList;

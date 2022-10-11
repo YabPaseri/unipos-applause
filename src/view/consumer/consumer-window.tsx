@@ -33,10 +33,10 @@ export const ConsumerWindow = memo<TProps>(({ open, onClose, changeMode, childre
 		[dispatch]
 	);
 
-	// 親子関係を無視した位置に ウィンドウを表示する。
 	return !open
 		? null
-		: createPortal(
+		: // 親子関係を無視した位置に ウィンドウを表示する。
+		  createPortal(
 				<_Root_ id={DRAG_PARENT}>
 					<Rnd
 						bounds={`#${DRAG_PARENT}`}
