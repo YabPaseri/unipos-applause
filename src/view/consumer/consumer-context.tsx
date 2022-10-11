@@ -66,13 +66,7 @@ const consumerReducer = (state: ConsumerState, action: Action): ConsumerState =>
 			return { ...init(), pos: state.pos, size: state.size };
 		}
 		case 'SET_ME': {
-			const me = action.me;
-			const next: ConsumerState = { ...state, me };
-			if (me) {
-				next.t_point = me.pocket.available_point;
-				next.t_clap = Math.floor(me.pocket.available_point / 2);
-			}
-			return next;
+			return { ...state, me: action.me };
 		}
 		case 'SET_TOTAL_POINT': {
 			const t_point = action.point;
