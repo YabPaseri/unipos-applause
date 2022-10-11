@@ -182,6 +182,9 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 					),
 				}}
 			/>
+			<Divider textAlign="center">
+				<Chip label="対象とする投稿の条件（オプション）" />
+			</Divider>
 			<MemoizedInput
 				fullWidth
 				size="small"
@@ -200,9 +203,6 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				title="指定した投稿に拍手をして、一括拍手の処理を終了します。"
 				InputLabelProps={{ shrink: true }}
 			/>
-			<Divider textAlign="center">
-				<Chip label="対象とする投稿の条件（オプション）" />
-			</Divider>
 			<IntInput
 				fullWidth
 				size="small"
