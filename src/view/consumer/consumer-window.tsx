@@ -80,7 +80,7 @@ ConsumerWindow.displayName = 'MovableWindow';
 
 const _Root_ = styled(Box)({
 	position: 'fixed',
-	inset: '60px 7px 40px', // 上はUniposの、下はFooterの幅(+遊び)
+	inset: '7px',
 	zIndex: 500,
 	pointerEvents: 'none',
 });
