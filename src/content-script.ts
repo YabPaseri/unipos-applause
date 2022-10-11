@@ -14,5 +14,5 @@ import { View } from './view';
 		return;
 	}
 
-	View.on();
+	setTimeout(View.on, 500);
 })();
