@@ -209,7 +209,7 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				value={already}
 				onChange={handleAlreadyChange}
 				onBlur={handleAlreadyBlur}
-				label="自分の拍手数"
+				label="自分の拍手数の上限"
 				title={`自分の拍手数が入力値以下の投稿のみ拍手をします。0なら拍手をしたことがない投稿のみ、${MAX_ALREADY_COUNT}を指定すれば全ての投稿が対象となります。`}
 				inputProps={{ min: '0', step: '1', max: `${MAX_ALREADY_COUNT}` }}
 				InputLabelProps={{ shrink: true }}
