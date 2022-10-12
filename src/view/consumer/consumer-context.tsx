@@ -30,7 +30,7 @@ const init = (): ConsumerState => ({
 	e_clap: 0,
 	offset: '',
 	breaks: '',
-	already: 0,
+	already: UniposAPI.MAX_PRAISE_COUNT - 1,
 	from: void 0,
 	to: void 0,
 	pos: void 0,
