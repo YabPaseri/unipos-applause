@@ -55,7 +55,7 @@ export const ConsumerWindow = memo<TProps>(({ open, onClose, changeMode, childre
 						onResizeStop={handleReized}
 						style={{ zIndex: 298, pointerEvents: 'all' }}
 					>
-						<Paper square>
+						<_Paper_ square elevation={3}>
 							<Box>
 								<_Header_ className={DRAG_HANDLE}>
 									<DragHandleIcon />
@@ -70,7 +70,7 @@ export const ConsumerWindow = memo<TProps>(({ open, onClose, changeMode, childre
 								</_Buttons_>
 							</Box>
 							<Box padding="20px 10px 10px">{children}</Box>
-						</Paper>
+						</_Paper_>
 					</Rnd>
 				</_Root_>,
 				document.body
@@ -84,6 +84,9 @@ const _Root_ = styled(Box)({
 	zIndex: 500,
 	pointerEvents: 'none',
 });
+const _Paper_ = styled(Paper)(({ theme }) => ({
+	border: `1px solid ${theme.palette.grey[300]}`,
+}));
 const _Header_ = styled(Box)(({ theme }) => ({
 	backgroundColor: theme.palette.divider,
 	display: 'flex',
