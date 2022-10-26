@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
-import { memo, useCallback, useMemo } from 'react';
+import { ClipboardEventHandler, memo, useCallback, useMemo, useRef } from 'react';
 import { Logger } from '../../logger';
 import UniposAPI from '../../unipos';
 import { CardsItem, Member } from '../../unipos/type';
@@ -41,8 +41,39 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 	const handleEClapChange = useCallback((clap: number | undefined) => dispatch({ type: 'SET_EACH_CLAP', clap }), [dispatch]);
 	const handleEachsBlur = useCallback(() => dispatch({ type: 'ADJUST_EACHS' }), [dispatch]);
 
-	const handleOffsetChange = useCallback((offset: string) => dispatch({ type: 'SET_OFFSET', offset }), [dispatch]);
-	const handleBreaksChange = useCallback((breaks: string) => dispatch({ type: 'SET_BREAKS', breaks }), [dispatch]);
+	const lastOffsetPasted = useRef('');
+	const lastOffsetPastedTime = useRef(0);
+	const handleOffsetChange = useCallback(
+		(offset: string) => {
+			// Pasteの検知からonChangeまで500ms未満 && 貼り付けた内容が変化後のテキストと同じ
+			if (Date.now() - lastOffsetPastedTime.current < 500 && offset === lastOffsetPasted.current) {
+				offset = UniposAPI.extractCardIdFromCardLink(offset) || offset;
+			}
+			dispatch({ type: 'SET_OFFSET', offset });
+		},
+		[dispatch]
+	);
+	const handleOffsetPaste = useCallback<ClipboardEventHandler<HTMLElement>>((e) => {
+		lastOffsetPasted.current = e.clipboardData.getData('text');
+		lastOffsetPastedTime.current = Date.now();
+	}, []);
+
+	const lastBreaksPasted = useRef('');
+	const lastBreaksPastedTime = useRef(0);
+	const handleBreaksChange = useCallback(
+		(breaks: string) => {
+			// Pasteの検知からonChangeまで500ms未満 && 貼り付けた内容が変化後のテキストと同じ
+			if (Date.now() - lastBreaksPastedTime.current < 500 && breaks === lastBreaksPasted.current) {
+				breaks = UniposAPI.extractCardIdFromCardLink(breaks) || breaks;
+			}
+			dispatch({ type: 'SET_BREAKS', breaks });
+		},
+		[dispatch]
+	);
+	const handleBreaksPaste = useCallback<ClipboardEventHandler<HTMLElement>>((e) => {
+		lastBreaksPasted.current = e.clipboardData.getData('text');
+		lastBreaksPastedTime.current = Date.now();
+	}, []);
 
 	const handleAlreadyChange = useCallback((already: number | undefined) => dispatch({ type: 'SET_ALREADY', already }), [dispatch]);
 	const handleAlreadyBlur = useCallback(() => dispatch({ type: 'ADJUST_ALREADY' }), [dispatch]);
@@ -190,8 +221,9 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				size="small"
 				value={offset}
 				onChange={handleOffsetChange}
+				onPaste={handleOffsetPaste}
 				label="オフセット(投稿ID)"
-				title="指定した投稿より、過去の投稿のみを対象にします。指定された投稿は拍手の対象となりません。"
+				title="指定した投稿より、過去の投稿のみを対象にします。指定された投稿は拍手の対象となりません。&#13;&#10;各投稿の「リンクをコピーする」で取得したURLを貼り付けると、自動でIDに変換されます。"
 				InputLabelProps={{ shrink: true }}
 			/>
 			<MemoizedInput
@@ -199,8 +231,9 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				size="small"
 				value={breaks}
 				onChange={handleBreaksChange}
+				onPaste={handleBreaksPaste}
 				label="拍手を終える投稿(投稿ID)"
-				title="指定した投稿に拍手をして、一括拍手の処理を終了します。"
+				title="指定した投稿に拍手をして、一括拍手の処理を終了します。&#13;&#10;各投稿の「リンクをコピーする」で取得したURLを貼り付けると、自動でIDに変換されます。"
 				InputLabelProps={{ shrink: true }}
 			/>
 			<IntInput

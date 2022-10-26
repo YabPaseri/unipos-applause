@@ -102,6 +102,19 @@ export class UniposAPI {
 		const id = [method, card_id, count].join('_');
 		return this.call<Empty>(method, id, { card_id, count });
 	};
+
+	/**
+	 * Unipos上でカードのリンクをコピーした時に得られるURLから、\
+	 * カードのIDを抽出する。非API、正規表現で処理している。
+	 */
+	public static readonly extractCardIdFromCardLink = (url: string): string | undefined => {
+		const match = url.match(this.CARD_LINK_REGEX);
+		return match && match.length > 1 ? match[1] : void 0;
+	};
+	private static readonly CARD_LINK_REGEX = new RegExp(
+		// uuid-v4 (8-4-4-4-12)
+		'^https://unipos.me/cards/([a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12})($|\\?.*$)'
+	);
 }
 
 type Tokens = { authn_token: string; refresh_token: string };
