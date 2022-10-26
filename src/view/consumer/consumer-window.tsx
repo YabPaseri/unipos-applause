@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import { memo, ReactNode, useCallback } from 'react';
+import { memo, ReactNode, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { DraggableData, Rnd, RndResizeCallback } from 'react-rnd';
 import { useConsumerDispatch, useConsumerState } from './consumer-context';
@@ -22,6 +22,9 @@ const DRAG_PARENT = 'au-rnd-root';
 const DRAG_HANDLE = 'au-rnd-handle';
 export const ConsumerWindow = memo<TProps>(({ open, onClose, changeMode, children }) => {
 	const { pos, size } = useConsumerState();
+	const width = useMemo(() => {
+		return typeof size.width === 'number' ? size.width : parseInt(size.width);
+	}, [size.width]);
 	const dispatch = useConsumerDispatch();
 
 	const handleDragged = useCallback((_: unknown, data: DraggableData) => dispatch({ type: 'SET_POS', pos: { x: data.x, y: data.y } }), [dispatch]);
@@ -40,14 +43,8 @@ export const ConsumerWindow = memo<TProps>(({ open, onClose, changeMode, childre
 				<_Root_ id={DRAG_PARENT}>
 					<Rnd
 						bounds={`#${DRAG_PARENT}`}
-						position={pos}
+						position={pos || { x: document.body.clientWidth - width - 14, y: 0 }}
 						size={size}
-						default={{
-							x: document.body.clientWidth - 514,
-							y: 0,
-							width: '500',
-							height: 'auto',
-						}}
 						minWidth={300}
 						dragHandleClassName={DRAG_HANDLE}
 						enableResizing={{ left: true, right: true }}

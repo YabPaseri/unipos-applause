@@ -31,7 +31,7 @@ const _Box_ = styled(Box)({
 	width: '100%',
 	backgroundColor: '#FFF',
 	borderTop: '1px solid #E9EAEA',
-	zIndex: '90', // 「未読の投稿」へのジャンプボタンより下
+	zIndex: '100', // 「未読の投稿」へのジャンプボタンより下
 });
 const _Stack_ = styled(Stack)({
 	height: '100%',

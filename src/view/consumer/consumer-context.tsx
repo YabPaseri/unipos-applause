@@ -2,8 +2,9 @@ import { createContext, Dispatch, ReactNode, useContext, useReducer } from 'reac
 import { Position, Props as RndProps } from 'react-rnd';
 import UniposAPI from '../../unipos';
 import { Me, Member } from '../../unipos/type';
+import { ConsumerMode } from './type';
 
-type Size = RndProps['size'];
+type Size = Exclude<RndProps['size'], undefined>;
 
 // state用context
 const ConsumerContext = createContext<ConsumerState | undefined>(void 0);
@@ -18,9 +19,11 @@ export type ConsumerState = {
 	already: number | undefined;
 	from: Member | undefined;
 	to: Member | undefined;
-	// ウィンドウ用
+	// viewの状態や情報
+	open: boolean;
+	mode: ConsumerMode;
 	pos: Position | undefined;
-	size: Size | undefined;
+	size: Size;
 };
 const init = (): ConsumerState => ({
 	me: void 0,
@@ -33,8 +36,11 @@ const init = (): ConsumerState => ({
 	already: UniposAPI.MAX_PRAISE_COUNT - 1,
 	from: void 0,
 	to: void 0,
+	//
+	open: false,
+	mode: 'window',
 	pos: void 0,
-	size: void 0,
+	size: { width: 500, height: 'auto' },
 });
 
 // dispatch用context
@@ -55,15 +61,17 @@ type Action =
 	| { type: 'ADJUST_ALREADY' }
 	| { type: 'SET_FROM'; from: Member | undefined }
 	| { type: 'SET_TO'; to: Member | undefined }
+	| { type: 'CHANGE_OPEN'; force?: boolean }
+	| { type: 'CHANGE_MODE'; force?: ConsumerMode }
 	| { type: 'SET_POS'; pos: Position | undefined }
-	| { type: 'SET_SIZE'; size: Size | undefined };
+	| { type: 'SET_SIZE'; size: Size };
 
 // reducer
 const consumerReducer = (state: ConsumerState, action: Action): ConsumerState => {
 	switch (action.type) {
 		case 'RESET': {
-			// ConsumerMode.windowのサイズは忘れない
-			return { ...init(), pos: state.pos, size: state.size };
+			const { open, mode, pos, size } = state;
+			return { ...init(), open, mode, pos, size };
 		}
 		case 'SET_ME': {
 			return { ...state, me: action.me };
@@ -144,6 +152,15 @@ const consumerReducer = (state: ConsumerState, action: Action): ConsumerState =>
 		}
 		case 'SET_TO': {
 			return { ...state, to: action.to };
+		}
+		//
+		case 'CHANGE_OPEN': {
+			const open = action.force || !state.open;
+			return { ...state, open };
+		}
+		case 'CHANGE_MODE': {
+			const mode = action.force || (state.mode === 'dialog' ? 'window' : 'dialog');
+			return { ...state, mode };
 		}
 		case 'SET_POS': {
 			return { ...state, pos: action.pos };
