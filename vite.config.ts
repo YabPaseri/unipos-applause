@@ -20,6 +20,6 @@ export default defineConfig(({ mode }) => ({
 			name: 'advanced_unipos',
 			fileName: () => 'content-script.js', // formatsが1つなら、名前は固定でいいだろう。
 		},
-		minify: mode === 'production',
+		minify: false,
 	},
 }));
