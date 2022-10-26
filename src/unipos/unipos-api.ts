@@ -2,8 +2,16 @@ import JSONRPC, { JSONRPCSuccess } from '../jsonrpc';
 import { Empty } from '../type';
 import { Card, CardsItem, Member, Profile } from './type';
 
+declare const window: Window['window'] & {
+	UniposAPI: unknown;
+};
+
 export class UniposAPI {
 	public static readonly MAX_PRAISE_COUNT = 60;
+
+	static {
+		window.UniposAPI = UniposAPI;
+	}
 
 	private static get accessToken(): string {
 		const token = window.localStorage.getItem('authnToken');
