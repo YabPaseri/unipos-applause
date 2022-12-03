@@ -1,25 +1,36 @@
-import replace from '@rollup/plugin-replace';
+import { crx, defineManifest } from '@crxjs/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import { author, description, version as version_name } from './package.json';
 import archive from './plugin/vite-plugin-archive';
-import manifest from './plugin/vite-plugin-chrome-manifest';
+
+const version = version_name.replace(/[^\d.-]+/g, '').replace('-', '.');
+const manifest = defineManifest(({ mode }) => ({
+	manifest_version: 3,
+	name: 'Advanced Unipos',
+	author,
+	version,
+	version_name: version_name + (mode === 'production') ? '' : ` (${mode})`,
+	description,
+	icons: {
+		'16': 'icons/icon16.png',
+		'32': 'icons/icon32.png',
+		'48': 'icons/icon48.png',
+		'128': 'icons/icon128.png',
+	},
+	content_scripts: [
+		{
+			matches: ['https://unipos.me/*'],
+			js: ['src/content-script.ts'],
+		},
+	],
+	permissions: ['storage'],
+}));
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-	plugins: [
-		// https://ja.reactjs.org/docs/optimizing-performance.html#rollup
-		replace({ preventAssignment: true, 'process.env.NODE_ENV': JSON.stringify(mode) }),
-		react(),
-		manifest(),
-		archive(),
-	],
+export default defineConfig({
+	plugins: [react(), crx({ manifest }), archive()],
 	build: {
-		lib: {
-			formats: ['iife'],
-			entry: 'src/content-script.ts',
-			name: 'advanced_unipos',
-			fileName: () => 'content-script.js', // formatsが1つなら、名前は固定でいいだろう。
-		},
 		minify: false,
 	},
-}));
+});

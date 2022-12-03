@@ -1,20 +1,19 @@
 {
   "name": "advanced-unipos",
   "version": "2.1.0",
-  "ext_version": null,
   "private": true,
   "description": "Unipos(https://unipos.me/) のツール",
   "license": "Apache-2.0",
   "author": "yabpaseri",
   "type": "module",
   "scripts": {
-    "build": "tsc && vite build",
-    "build-dev": "tsc && vite build --mode development",
-    "dev": "vite",
-    "preview": "vite preview",
+	"dev": "vite",
+	"test": "tsc && vite build --mode test",
+    "build": "tsc && vite build --mode production",
     "ver": "npm --no-git-tag-version version"
   },
   "dependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.7",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
