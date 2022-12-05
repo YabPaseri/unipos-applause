@@ -7,8 +7,8 @@
   "author": "yabpaseri",
   "type": "module",
   "scripts": {
-	"dev": "vite",
-	"test": "tsc && vite build --mode test",
+    "dev": "vite",
+    "test": "tsc && vite build --mode test",
     "build": "tsc && vite build --mode production",
     "ver": "npm --no-git-tag-version version"
   },
@@ -20,7 +20,8 @@
     "@mui/material": "^5.10.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-rnd": "^10.3.7"
+    "react-rnd": "^10.3.7",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^4.0.0",

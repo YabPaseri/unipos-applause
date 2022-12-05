@@ -2,21 +2,8 @@ import { Preferences } from '../preferences';
 import { LogLevel } from './log-level';
 
 export class Logger {
-	private static levels = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'] as const;
+	public static readonly levels = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'] as const;
 	private static table: { [K in LogLevel]: number } = { DEBUG: 1, INFO: 2, WARN: 3, ERROR: 4, FATAL: 5 };
-
-	public static readonly level = {
-		/**
-		 * 引数がログレベルを表す文字か否か
-		 */
-		is: (str: string): str is LogLevel => {
-			return str in this.table;
-		},
-		/**
-		 * ログレベルを表す文字の一覧
-		 */
-		summary: this.levels.join(', '),
-	} as const;
 
 	private static log(level: LogLevel) {
 		// 開発ビルドのときは、設定によらず全ログを表示する
