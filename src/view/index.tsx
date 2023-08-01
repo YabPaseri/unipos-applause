@@ -1,7 +1,8 @@
 import { Component, Fragment } from 'react';
-import { createRoot, Root } from 'react-dom/client';
+import { Root, createRoot } from 'react-dom/client';
 import { Empty } from '../type';
 import UIs, { GlobalStyle } from '../ui';
+import Alarm from './alarm';
 import { Footer } from './components';
 import Consumer from './consumer';
 import Support from './support';
@@ -35,6 +36,7 @@ export class View extends Component<Empty> {
 				<GlobalStyle />
 				<Footer>
 					<Consumer />
+					<Alarm />
 					<Support />
 				</Footer>
 			</Fragment>

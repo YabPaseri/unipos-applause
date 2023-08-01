@@ -24,7 +24,7 @@ const manifest = defineManifest(({ mode }) => ({
 			js: ['src/content-script.ts'],
 		},
 	],
-	permissions: ['storage'],
+	permissions: ['storage', 'alarms'],
 }));
 
 // https://vitejs.dev/config/

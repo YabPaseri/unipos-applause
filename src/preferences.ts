@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Logger, LogLevel } from './logger';
+import Util from './util';
 
 export type PreferencesListener = (before: Readonly<Preference>, after: Readonly<Preference>) => void;
 
@@ -62,12 +63,42 @@ export class Preferences {
 	public static set try_limit(v: number) {
 		if (this.#data.try_limit !== v) this.notify((p) => (p.try_limit = v));
 	}
+	/**
+	 * 拍手の送り忘れアラームの有効フラグ
+	 */
+	public static get alarm_active(): boolean {
+		return this.#data.alarm_active;
+	}
+	public static set alarm_active(v: boolean) {
+		if (this.#data.alarm_active !== v) this.notify((p) => (p.alarm_active = v));
+	}
+	/**
+	 * 拍手の送り忘れアラームを表示する曜日
+	 */
+	public static get alarm_wday(): number {
+		return this.#data.alarm_wday;
+	}
+	public static set alarm_wday(v: number) {
+		if (this.#data.alarm_wday !== v) this.notify((p) => (p.alarm_wday = v));
+	}
+	/**
+	 * 拍手の送り忘れアラームを表示する時刻
+	 */
+	public static get alarm_time(): string {
+		return this.#data.alarm_time;
+	}
+	public static set alarm_time(v: string) {
+		if (this.#data.alarm_time !== v) this.notify((p) => (p.alarm_time = v));
+	}
 }
 
 class Preference {
 	#log_level!: LogLevel;
 	#try_interval!: number;
 	#try_limit!: number;
+	#alarm_active!: boolean;
+	#alarm_wday!: number;
+	#alarm_time!: string;
 
 	constructor(json: { [K in keyof Preference]+?: Preference[K] }) {
 		const d = <K extends keyof this, V extends this[K]>(key: K, val: V | undefined, def: V) => {
@@ -80,6 +111,9 @@ class Preference {
 		d('log_level', json.log_level, 'INFO');
 		d('try_interval', json.try_interval, 250);
 		d('try_limit', json.try_limit, 40);
+		d('alarm_active', json.alarm_active, false);
+		d('alarm_wday', json.alarm_wday, 5); // FRI
+		d('alarm_time', json.alarm_time, '1700'); // 17:00
 	}
 
 	public get toJSON() {
@@ -87,6 +121,9 @@ class Preference {
 			log_level: this.#log_level,
 			try_interval: this.#try_interval,
 			try_limit: this.#try_limit,
+			alarm_active: this.#alarm_active,
+			alarm_wday: this.#alarm_wday,
+			alarm_time: this.#alarm_time,
 		});
 	}
 
@@ -121,5 +158,37 @@ class Preference {
 	public set try_limit(v: number) {
 		const _v = z.number().int().min(1).parse(v);
 		this.#try_limit = _v;
+	}
+
+	/**
+	 * 拍手の送り忘れアラームの有効フラグ
+	 */
+	public get alarm_active(): boolean {
+		return this.#alarm_active;
+	}
+	public set alarm_active(v: boolean) {
+		const _v = z.boolean().parse(v);
+		this.#alarm_active = _v;
+	}
+
+	/**
+	 * 拍手の送り忘れアラームを表示する曜日
+	 */
+	public get alarm_wday(): number {
+		return this.#alarm_wday;
+	}
+	public set alarm_wday(v: number) {
+		const _v = z.number().int().min(0).max(6).parse(v);
+		this.#alarm_wday = _v;
+	}
+
+	/**
+	 * 拍手の送り忘れアラームを表示する時刻
+	 */
+	public get alarm_time(): string {
+		return this.#alarm_time;
+	}
+	public set alarm_time(v: string) {
+		if (Util.isTime(v, true)) this.#alarm_time = v;
 	}
 }
