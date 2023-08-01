@@ -13,9 +13,10 @@ import { styled } from '@mui/material/styles';
 import { TimePicker, TimeValidationError } from '@mui/x-date-pickers';
 import { format as formatDateFns, parse as parseDateFns } from 'date-fns';
 import { memo, useCallback, useEffect, useState } from 'react';
+import { Logger } from '../../logger';
+import { S_UpdateAlarm } from '../../message';
 import { Preferences } from '../../preferences';
 import Util from '../../util';
-import { Logger } from '../../logger';
 
 type TProps = {
 	open: boolean;
@@ -29,7 +30,7 @@ export const AlarmDialog = memo<TProps>(({ open, onClose }) => {
 	const [hasError, setHasError] = useState(false);
 	const [saving, setSaving] = useState(false);
 	useEffect(() => {
-		// 2回目以降の初期化
+		// 2回目以降の初期化に必要
 		setActive(Preferences.alarm_active);
 		setWDay(Preferences.alarm_wday);
 		setTime(Preferences.alarm_time);
@@ -44,12 +45,9 @@ export const AlarmDialog = memo<TProps>(({ open, onClose }) => {
 		Preferences.alarm_wday = wday;
 		Preferences.alarm_time = time;
 		await Preferences.save();
-
-		await new Promise((ok) => {
-			// TODO: アラームの更新
-			//  --> content-scriptの世界からは出来ないので、Preferenceをbackground側で参照してもらって処理
-			setTimeout(ok, 500);
-		});
+		// アラームの更新(バックグラウンド処理)
+		const message: S_UpdateAlarm = { from: 'content', summary: 'update-alarm' };
+		await chrome.runtime.sendMessage(message);
 		setSaving(false);
 		Logger.info('success!!', `active=${Preferences.alarm_active},`, `wday=${Preferences.alarm_wday},`, `time=${Preferences.alarm_time}`);
 		onClose();
@@ -93,18 +91,13 @@ export const AlarmDialog = memo<TProps>(({ open, onClose }) => {
 					</RadioGroup>
 					<TimePicker //
 						disabled={uncontrol}
-						// label="通知する時刻"
 						value={parseDateFns(time, 'HHmm', new Date())}
 						onChange={handleTimeChange}
 						onError={handleTimeError}
 						views={['hours', 'minutes']}
 						ampm={false}
-						slotProps={{
-							field: Util.any({
-								// fullWidth: true,
-								variant: 'standard',
-							}),
-						}}
+						// 型が補完されないどころか、変。anyで騙す
+						slotProps={{ field: Util.any({ variant: 'standard' }) }}
 					/>
 				</_Paper_>
 			</DialogContent>

@@ -13,6 +13,9 @@ export class Preferences {
 
 	public static readonly init = async () => {
 		if (this.#data) return;
+		await this.reload();
+	};
+	public static readonly reload = async () => {
 		this.#data = new Preference(await chrome.storage.local.get(null));
 		await this.save();
 	};
