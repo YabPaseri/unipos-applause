@@ -28,8 +28,8 @@ import { Preferences } from './preferences';
 		// スケジュールされた時刻で、デスクトップ通知を飛ばす。
 		if (alarm.name === import.meta.env.VITE_APP_TITLE) {
 			chrome.notifications.create(import.meta.env.VITE_APP_TITLE, {
-				title: 'Uniposの拍手はお忘れではありませんか?',
-				message: 'セットした日時になりました。\nUniposを覗いてみましょう',
+				title: 'Uniposで気持ちは伝えましたか?',
+				message: 'セットした日時になりました。\n通知をクリックして\nUniposを覗いてみませんか?',
 				type: 'basic',
 				iconUrl: chrome.runtime.getURL('icons/icon128.png'),
 				eventTime: Date.now(),
