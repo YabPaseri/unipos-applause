@@ -3,15 +3,17 @@ import { Logger } from './logger';
 import { SContent } from './message';
 import { Preferences } from './preferences';
 
-(async function main() {
-	// 定期実行を行うために、アラーム（スケジューラ）を使用する。
-	// content_script側で設定を切り替えるが、アラームへの登録は background(service-worker)しか行えないので、
-	// メッセージ経由で行うこととする（content_scriptから依頼だけ飛ばしてもらう）
-	await Preferences.init();
-
-	// メッセージのリスナを登録
+// async でメイン関数を作り、await Preferences.init(); をしてから各リスナーに対してイベントを追加していたが、
+// service-workerの仕様上なのか、メッセージの取得時に落ちる。
+// 必要な時にこのjsが実行されて、後続の処理...なので、間に合わないのだろう。
+// main関数は非同期にしないことにする。
+(function main() {
+	// メッセージのリスナーを登録
 	chrome.runtime.onMessage.addListener(async (message: SContent, _, sendResponse) => {
-		Logger.debug('background received message:', JSON.stringify(message));
+		// initは既存のインスタンスを見続けるが、それだと、service-workerが生きている間はフロントで設定した最新値を見られない
+		// インスタンスを必ず差し替えるreloadを使うことにする。
+		await Preferences.reload();
+		Logger.debug('chrome.runtime.onMessage / message:', JSON.stringify(message));
 		switch (message.summary) {
 			case 'update-alarm': {
 				// なぜか、content側でmessageが取れないんだよな...
@@ -23,8 +25,10 @@ import { Preferences } from './preferences';
 		}
 	});
 
-	// アラームのリスナを登録
-	chrome.alarms.onAlarm.addListener((alarm) => {
+	// アラームのリスナーを登録
+	chrome.alarms.onAlarm.addListener(async (alarm) => {
+		await Preferences.reload();
+		Logger.debug('chrome.alarms.onAlarm / alarm:', JSON.stringify(alarm));
 		// スケジュールされた時刻で、デスクトップ通知を飛ばす。
 		if (alarm.name === import.meta.env.VITE_APP_TITLE) {
 			chrome.notifications.create(import.meta.env.VITE_APP_TITLE, {
@@ -32,15 +36,14 @@ import { Preferences } from './preferences';
 				message: 'セットした日時になりました。\n通知をクリックして\nUniposを覗いてみませんか?',
 				type: 'basic',
 				iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-				eventTime: Date.now(),
-				priority: 2,
-				silent: false,
 			});
 		}
 	});
 
-	// 通知クリック時のリスナを登録。
+	// 通知クリック時のリスナーを登録。
 	chrome.notifications.onClicked.addListener(async (id) => {
+		await Preferences.reload();
+		Logger.debug(`chrome.notifications.onClicked / id: ${id}`);
 		if (id === import.meta.env.VITE_APP_TITLE) {
 			// クリック時にはUniposのURLに飛ぶようにしておく。固有URLではないので固定でOK
 			chrome.tabs.create({ active: true, url: 'https://unipos.me/all' });
@@ -52,8 +55,8 @@ import { Preferences } from './preferences';
  * chromeのストレージに格納されている設定をもとに、アラーム（スケジューラ）の更新を行う
  */
 async function updateAlarm() {
-	Logger.debug('#update Alarm...');
-	await Preferences.reload(); // initだと、既に持っているインスタンスばかり参照して、最新の情報が取れない？
+	await Preferences.reload();
+	Logger.debug('#updateAlarm, Preferences:', Preferences.str());
 	// 全消し→必要なら作る
 	await chrome.alarms.clearAll();
 	if (Preferences.alarm_active) {
@@ -69,9 +72,9 @@ async function updateAlarm() {
 			when: d.getTime(),
 			periodInMinutes: 10080, // 7*24*60 = 1週間
 		});
-		Logger.info(`update alarm. first is ${JSON.stringify(d)}`);
+		Logger.info(`Alarm updated. The first time is ${d.toLocaleString()}`);
 		return d;
 	}
-	Logger.debug(`removed alarm`);
+	Logger.debug(`Alarm removed.`);
 	return null;
 }
