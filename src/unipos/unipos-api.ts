@@ -127,7 +127,8 @@ export type GetCardsOptions = {
 	tag_name?: string; //          {name}のタグを持つ
 	to_member_id?: string; //      {id}が受け取った
 	from_member_id?: string; //    {id}が送った
-	praised_member_id?: string; // {id}が拍手した
+	// 機能の提供が終了: https://support.unipos.me/hc/ja/articles/20356855590169
+	// praised_member_id?: string; // {id}が拍手した
 	duration?: {
 		begin: number; //          {begin}から
 		end: number; //            {end} までの期間
