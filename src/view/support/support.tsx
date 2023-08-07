@@ -1,7 +1,7 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { Preferences } from '../../preferences';
-import UIs from '../../ui';
+import { UIs } from '../../ui';
 import { FooterButton } from '../components/';
 
 /**
@@ -17,12 +17,12 @@ export const Support = memo(() => {
 	useEffect(() => {
 		const ms = Preferences.try_interval;
 		const i = setInterval(() => {
-			const iframe = UIs.find<HTMLIFrameElement>('SUPPORT');
+			const iframe = UIs.find<HTMLIFrameElement>(UIs.selectors.SUPPORT);
 			const button = iframe?.contentDocument?.querySelector('button');
 			const parent = iframe?.parentElement;
 			if (iframe && parent && button) {
 				clearInterval(i);
-				UIs.class(iframe, '+', 'HIDDEN'); // 既存のサポートボタンは隠す
+				UIs.class(iframe, 'add', UIs.classes.HIDDEN); // 既存のサポートボタンは隠す
 				setButton(button); // 代替ボタンclick時に、押したことにするボタンを記憶
 				// ダイアログ展開を要素の増減で検知して、ボタンをdisabledにする
 				const obs = new MutationObserver(() => {
@@ -32,7 +32,7 @@ export const Support = memo(() => {
 				obs.observe(parent, { childList: true });
 				return () => {
 					obs.disconnect();
-					UIs.class(iframe, '-', 'HIDDEN');
+					UIs.class(iframe, 'remove', UIs.classes.HIDDEN);
 				};
 			}
 		}, ms);

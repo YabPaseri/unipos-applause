@@ -38,6 +38,12 @@ export class UniposAPI {
 		}
 	}
 
+	// method:Unipos.Login, params:{email_address, password} でリクエストすることで、ログイン自体は出来た。
+	// 返却値は Tokens の型で扱える（もう少し情報は多いが）
+	// ただ、流石にオリジンが違うので、background-scriptで全てを行うことは出来なかった。何故試す前に気が付かなった...。
+	// と、いうことで UniposAPI は https://unipos.me/ の上で使うしかない。
+	// それならログインメソッドを UniposAPI が持つ理由もないか... と実装をリバートした。
+
 	/**
 	 * リフレッシュトークンによるトークンの再発行を行う
 	 */

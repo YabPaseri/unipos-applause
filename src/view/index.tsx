@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 import { Empty } from '../type';
-import UIs, { GlobalStyle } from '../ui';
+import { GlobalStyle, UIs } from '../ui';
 import Alarm from './alarm';
 import { Footer } from './components';
 import Consumer from './consumer';
