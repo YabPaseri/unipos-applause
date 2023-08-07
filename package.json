@@ -1,6 +1,6 @@
 {
   "name": "advanced-unipos",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "description": "Unipos(https://unipos.me/) のツール",
   "license": "Apache-2.0",
