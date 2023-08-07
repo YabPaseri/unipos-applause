@@ -28,7 +28,7 @@ const ConsumerImpl = memo(() => {
 					clickTimer.current = setTimeout(() => {
 						dispatch({ type: 'CHANGE_OPEN' });
 						clickTimer.current = null;
-					}, 150);
+					}, 200);
 				} else if (e.detail === 2) {
 					if (clickTimer.current != null) {
 						clearTimeout(clickTimer.current);

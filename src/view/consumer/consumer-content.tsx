@@ -243,7 +243,7 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				onChange={handleAlreadyChange}
 				onBlur={handleAlreadyBlur}
 				label="自分の拍手数の上限"
-				title={`自分の拍手数が入力値以下の投稿のみ拍手をします。0なら拍手をしたことがない投稿のみ、${MAX_ALREADY_COUNT}を指定すれば全ての投稿が対象となります。`}
+				title={`自分の拍手数が入力値以下の投稿のみ拍手をします。\n0なら拍手をしたことがない投稿のみ、${MAX_ALREADY_COUNT}を指定すれば全ての投稿が対象となります。`}
 				inputProps={{ min: '0', step: '1', max: `${MAX_ALREADY_COUNT}` }}
 				InputLabelProps={{ shrink: true }}
 			/>
@@ -251,14 +251,14 @@ export const ConsumerContent = memo<TProps>(({ close }) => {
 				value={from}
 				onChange={handleFromChange}
 				label="投稿をおくった人"
-				title={!to ? '投稿の差出人を指定します。' : '「投稿をもらった人」と同時に指定することは出来ません。'}
+				title={`投稿の差出人を指定します。${!to ? '' : '\n※「投稿をもらった人」と同時に指定することは出来ません。'}`}
 				disabled={!!to}
 			/>
 			<MemberSearch
 				value={to}
 				onChange={handleToChange}
 				label="投稿をもらった人"
-				title={!from ? '投稿の宛先を指定します。' : '「投稿をおくった人」と同時に指定することは出来ません。'}
+				title={`投稿の宛先を指定します。${!from ? '' : '\n※「投稿をおくった人」と同時に指定することは出来ません。'}`}
 				disabled={!!from}
 			/>
 			<Stack direction="row" justifyContent="center">
