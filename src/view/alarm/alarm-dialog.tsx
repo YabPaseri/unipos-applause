@@ -13,8 +13,8 @@ import { styled } from '@mui/material/styles';
 import { TimePicker, TimeValidationError } from '@mui/x-date-pickers';
 import { format as formatDateFns, parse as parseDateFns } from 'date-fns';
 import { memo, useCallback, useEffect, useState } from 'react';
+import { MessageListener } from '../../background/message-listener';
 import { Logger } from '../../logger';
-import { S_UpdateAlarm } from '../../message';
 import { Preferences } from '../../preferences';
 import Util from '../../util';
 
@@ -46,9 +46,12 @@ export const AlarmDialog = memo<TProps>(({ open, onClose }) => {
 		Preferences.alarm_time = time;
 		await Preferences.save();
 		// アラームの更新(バックグラウンド処理)
-		const message: S_UpdateAlarm = { from: 'content', summary: 'update-alarm' };
-		await chrome.runtime.sendMessage(message);
-		setSaving(false);
+		try {
+			Logger.debug(await MessageListener.send({ summary: 'update-alarm' }));
+		} finally {
+			// 後続の処理をしたくないので、catchはせずそのまま流す。
+			setSaving(false);
+		}
 		Logger.info('success!!', `active=${Preferences.alarm_active},`, `wday=${Preferences.alarm_wday},`, `time=${Preferences.alarm_time}`);
 		onClose();
 	}, [active, onClose, time, wday]);

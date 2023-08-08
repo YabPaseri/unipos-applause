@@ -25,7 +25,7 @@ const manifest = defineManifest(({ mode }) => ({
 		},
 	],
 	background: {
-		service_worker: 'src/service-worker.ts',
+		service_worker: 'src/background/index.ts',
 		type: 'module',
 	},
 	permissions: ['storage', 'alarms', 'notifications'],
