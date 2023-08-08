@@ -1,5 +1,4 @@
 import JSONRPC, { JSONRPCSuccess } from '../jsonrpc';
-import { Empty } from '../type';
 import { Card, CardsItem, Member, Profile } from './type';
 
 declare const window: Window['window'] & {
@@ -124,6 +123,7 @@ export class UniposAPI {
 }
 
 type Tokens = { authn_token: string; refresh_token: string };
+type Empty = Record<string, never>; // = {}
 
 // to_member_id と from_member_id が共存出来ないなど、制限はあるようだ。
 // しっかりとやるのであれば、JSONRPCResultのようなtype宣言が必要だが、

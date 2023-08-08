@@ -1,13 +1,12 @@
 import { Component, Fragment } from 'react';
 import { Root, createRoot } from 'react-dom/client';
-import { Empty } from '../type';
 import { GlobalStyle, UIs } from '../ui';
 import Alarm from './alarm';
 import { Footer } from './components';
 import Consumer from './consumer';
 import Support from './support';
 
-export class View extends Component<Empty> {
+export class View extends Component<unknown> {
 	static #root: Root;
 	private static get root(): Root {
 		if (this.#root) return this.#root;
@@ -27,7 +26,7 @@ export class View extends Component<Empty> {
 		this.#on = false;
 	};
 
-	private constructor(props: Empty) {
+	private constructor(props: unknown) {
 		super(props);
 	}
 	override render(): React.ReactNode {
