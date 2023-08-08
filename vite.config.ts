@@ -10,7 +10,7 @@ const manifest = defineManifest(({ mode }) => ({
 	name: 'Advanced Unipos',
 	author,
 	version,
-	version_name: version_name + (mode === 'production') ? '' : ` (${mode})`,
+	version_name: version_name + (mode === 'production' ? '' : ` (${mode})`),
 	description,
 	icons: {
 		'16': 'icons/icon16.png',
