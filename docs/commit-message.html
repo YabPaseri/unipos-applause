@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>コミットメッセージ サンプル</title>
+		<script type="text/javascript">
+			const LIST = [
+				{ icon: '🎉', code: ':tada:', desc: 'プロジェクトの最初のコミット' },
+				{ icon: '✨', code: ':sparkles:', desc: '新規機能の実装時' },
+				{ icon: '⚡️', code: ':zap:', desc: '既存の機能に別の機能を追加するとき' },
+				{ icon: '🔥', code: ':fire:', desc: '機能を削除したとき' },
+				{ icon: '🐛', code: ':bug:', desc: 'バグを修正したとき' },
+				{ icon: '🩹', code: ':adhesive_bandage:', desc: 'ちょっとした修正' },
+				{ icon: '🚧', code: ':construction:', desc: '作業途中' },
+				{ icon: '♻️', code: ':recycle:', desc: 'リファクタリング' },
+				{ icon: '🚚', code: ':truck:', desc: 'ファイルの移動やリネーム' },
+				{ icon: '⏪️', code: ':rewind:', desc: '変更を戻すとき' },
+				{ icon: '🔀', code: ':twisted_rightwards_arrows:', desc: 'マージ' },
+				{ icon: '🔧', code: ':wrench:', desc: '文章の変更(構成/設定ファイルなど)' },
+				{ icon: '📝', code: ':memo:', desc: '文章の変更(README,ドキュメント,etc...)' },
+				{ icon: '📦️', code: ':package:', desc: 'パッケージ化' },
+				{ icon: '🔖', code: ':bookmark:', desc: 'リリース' },
+			];
+
+			/** @param {MouseEvent} e */
+			function copy(e) {
+				const preview = document.getElementById('preview');
+				const icon = e.target.parentElement.parentElement.querySelector('.icon');
+				const code = e.target.parentElement.parentElement.querySelector('.code');
+				if (icon?.textContent && code?.value) {
+					window.navigator.clipboard.writeText(code.value).then(() => {
+						preview.textContent = icon.textContent;
+					});
+				}
+			}
+
+			window.addEventListener('DOMContentLoaded', () => {
+				/** @type {HTMLTemplateElement} */
+				const tmp = document.getElementById('tmp');
+				const tbody = document.getElementById('tbody');
+				for (const item of LIST) {
+					const clone = tmp.content.cloneNode(true);
+					/** @type {NodeListOf<HTMLTableCellElement>} */
+					const td = clone.querySelectorAll('td');
+					td[0].textContent = item.icon;
+					td[1].firstElementChild.value = item.code;
+					td[2].firstElementChild.onclick = copy;
+					td[3].textContent = item.desc;
+					tbody.append(clone);
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<p>最後にコピーした要素: <span id="preview"></span></p>
+		<table>
+			<thead>
+				<tr>
+					<td></td>
+					<td>code</td>
+					<td></td>
+					<td>説明</td>
+				</tr>
+			</thead>
+			<tbody id="tbody"></tbody>
+		</table>
+		<p>
+			お世話になっているサイト様(引用元)<br />
+			<a target="_blank" href="https://tech-blog.cloud-config.jp/2021-12-21-git-moji-list/"
+				>gitmojiの絵文字ってどれを使えばいいの？ | cloud.config Tech Blog</a
+			>
+		</p>
+		<template id="tmp">
+			<tr>
+				<td class="icon"></td>
+				<td>
+					<input readonly type="text" class="code" />
+				</td>
+				<td>
+					<button>COPY</button>
+				</td>
+				<td></td>
+			</tr>
+		</template>
+	</body>
+</html>

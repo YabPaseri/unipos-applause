@@ -1,0 +1,1 @@
+export { ExtensionError } from './ExtensionError';

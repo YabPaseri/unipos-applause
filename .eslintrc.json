@@ -1,0 +1,61 @@
+{
+	"root": true,
+	"env": {
+		"browser": true,
+		"es6": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:react/recommended",
+		"plugin:react-hooks/recommended",
+		"prettier"
+	],
+	"ignorePatterns": ["dist"],
+	"overrides": [],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"ecmaFeatures": { "jsx": true }
+	},
+	"plugins": ["react", "react-hooks", "react-refresh", "@typescript-eslint", "import"],
+	"settings": {
+		"import/resolver": { "typescript": {} }
+	},
+	"rules": {
+		"react/prop-types": "off",
+		"react/jsx-uses-react": "off",
+		"react/react-in-jsx-scope": "off",
+		"react-hooks/rules-of-hooks": "error",
+		"react-hooks/exhaustive-deps": "warn",
+		"react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
+		"import/no-restricted-paths": [
+			"error",
+			{
+				"zones": [
+					{
+						"from": "./src/*.ts",
+						"target": "./src/**/*",
+						"message": "Files directly under src are not allowed to be imported."
+					},
+					{
+						"from": "./src/view/**/*",
+						"target": ["./src/!(view)/**/*", "./src/modification.ts", "./src/background.ts"],
+						"message": "Files in the view directory cannot be imported from outside the view directory."
+					},
+					{
+						"from": "./src/view/options/**/*",
+						"target": "./src/view/!(options)/**/*",
+						"message": "Files in the options directory cannot be imported elsewhere."
+					},
+					{
+						"from": "./src/view/popup/**/*",
+						"target": "./src/view/!(popup)/**/*",
+						"message": "Files in the popup directory cannot be imported elsewhere."
+					}
+				]
+			}
+		]
+	}
+}
