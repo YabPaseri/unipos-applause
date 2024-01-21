@@ -45,14 +45,9 @@
 						"message": "Files in the view directory cannot be imported from outside the view directory."
 					},
 					{
-						"from": "./src/view/options/**/*",
-						"target": "./src/view/!(options)/**/*",
-						"message": "Files in the options directory cannot be imported elsewhere."
-					},
-					{
-						"from": "./src/view/popup/**/*",
-						"target": "./src/view/!(popup)/**/*",
-						"message": "Files in the popup directory cannot be imported elsewhere."
+						"from": "./src/view/unipos/**/*",
+						"target": "./src/view/!(unipos)/**/*",
+						"message": "Files in the unipos directory cannot be imported elsewhere."
 					}
 				]
 			}

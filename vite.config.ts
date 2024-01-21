@@ -24,8 +24,6 @@ const manifest = defineManifest(({ mode }) => {
 			'48': 'icons/icon48.png',
 			'128': 'icons/icon128.png',
 		},
-		options_page: 'pages/options.html',
-		action: { default_popup: 'pages/popup.html' },
 		background: { service_worker: 'src/background.ts' },
 		content_scripts: [
 			{

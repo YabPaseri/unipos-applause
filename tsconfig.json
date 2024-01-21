@@ -8,9 +8,10 @@
 
 		"baseUrl": "./",
 		"paths": {
-			"$/*": ["./src/*"],
 			"$view/*": ["./src/view/*"],
 			"$common/*": ["./src/common/*"],
+			"$error/*": ["./src/error/*"],
+			"$/*": ["./src/*"],
 		},
 
 		/* Bundler mode */
