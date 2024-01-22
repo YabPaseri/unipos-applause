@@ -24,6 +24,8 @@ const manifest = defineManifest(({ mode }) => {
 			'48': 'icons/icon48.png',
 			'128': 'icons/icon128.png',
 		},
+		web_accessible_resources: [{ resources: ['icons/icon128.png'], matches: ['<all_urls>'] }],
+		permissions: ['storage', 'alarms', 'notifications'],
 		background: { service_worker: 'src/background.ts' },
 		content_scripts: [
 			{
