@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.5",
     "@mui/material": "^5.15.5",
+    "@mui/x-date-pickers": "^6.19.0",
     "browser-util-inspect": "^0.2.0",
     "date-fns": "^3.3.0",
     "react": "^18.2.0",
