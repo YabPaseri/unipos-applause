@@ -37,5 +37,13 @@ export default defineConfig({
 	plugins: [react(), crx({ manifest }), archive()],
 	build: {
 		minify: false,
+		// TODO: 別の機会に
+		// rollupOptions: {
+		// 	output: {
+		// 		entryFileNames: `assets/[name].js`,
+		// 		chunkFileNames: `assets/[name].js`,
+		// 		assetFileNames: `assets/[name].[ext]`,
+		// 	},
+		// },
 	},
 });
